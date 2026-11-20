@@ -1,0 +1,77 @@
+// Los colores cambian a la paleta de Fovea con la página (ver _fovea).
+@include register-colors($fov-exp-palette);
+
+.exp {
+    @include use-palette($fov-exp-palette, 1);
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 72px;
+    transition: palette-transition($fov-exp-palette, $fov-color-dur, $ease-std, $fov-color-delay);
+
+    .is-fovea & { @include use-palette($fov-exp-palette, 2); }
+
+    .lbl { color: var(--ex-accent); }
+    .lead { color: var(--ex-text); }
+    .todo { border-color: var(--ex-todo-line); color: var(--ex-todo-fg); background: var(--ex-todo-bg); }
+
+    @include below($bp-nav) { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+}
+
+.exp-h {
+    position: sticky;
+    top: 120px;
+    align-self: start;
+
+    @include below($bp-nav) { position: static; }
+}
+
+.exp-lead { margin-top: 20px; }
+.exp-cta {
+    margin-top: 32px;
+
+    .btn-w { color: var(--ex-btn-fg); }
+    .btn-w:hover { color: $white; }
+}
+
+.tl-w { position: relative; padding-left: 40px; }
+
+.tl-track {
+    position: absolute;
+    top: 8px; bottom: 8px; left: 7px;
+    width: 1.5px;
+    background: var(--ex-track);
+}
+
+.tl-fill { position: absolute; inset: 0; background: var(--ex-accent); transform-origin: 50% 0; }
+
+.tl-list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+.tl-i {
+    position: relative;
+    padding: 24px 28px;
+    border-radius: 20px;
+    transition: background .4s;
+
+    &:hover { background: var(--ex-hover); }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 30px; left: -40px;
+        width: 16px; height: 16px;
+        border-radius: 50%;
+        background: var(--ex-dot);
+        border: 2px solid var(--ex-accent);
+        transition: background .3s, box-shadow .3s;
+    }
+
+    &:hover::before { background: var(--ex-accent); box-shadow: 0 0 0 7px var(--ex-track); }
+
+    h3 { margin: 0; font-size: 24px; letter-spacing: -.025em; }
+
+    @include below(560px) { padding: 20px 16px; }
+}
+
+.tl-d { margin: 0 0 8px; font-size: 12.5px; letter-spacing: .04em; color: var(--ex-accent); }
+.tl-r { margin: 4px 0 12px; color: var(--ex-role); font-weight: 600; }
+.tl-t { margin: 0; color: var(--ex-text); line-height: 1.65; }

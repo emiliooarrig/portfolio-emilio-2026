@@ -1,0 +1,214 @@
+.cobalt {
+    background: $cobalt;
+    color: $white;
+    overflow: hidden;
+
+    .lbl { color: #DCE5FF; }
+}
+
+.co-ring {
+    position: absolute;
+    right: -180px; top: -180px;
+    width: 520px; height: 520px;
+    border-radius: 50%;
+    border: 1.5px solid rgba($white, .18);
+    animation: breathe 9s ease-in-out infinite;
+}
+
+.co-ring2 {
+    position: absolute;
+    right: -80px; top: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba($white, .22);
+    animation: spin 60s linear infinite;
+}
+
+.ct {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 64px;
+    align-items: start;
+
+    @include below($bp-md) { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+}
+
+.ct-h {
+    margin: 0;
+    font-size: clamp(34px, 4.2vw, 58px);
+    line-height: 1.04;
+    letter-spacing: -.045em;
+    font-weight: 800;
+    text-wrap: balance;
+}
+
+.ct-p { margin: 24px 0 0; max-width: 460px; font-size: 18px; line-height: 1.6; color: #E4EBFF; }
+
+.ct-list { display: flex; flex-direction: column; margin: 40px 0 0; padding: 0; list-style: none; }
+
+.ct-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 60px;
+    padding: 16px 0;
+    border-top: 1px solid rgba($white, .24);
+    color: $white;
+    transition: padding .35s $ease-std;
+
+    .ic { transition: transform .4s; }
+
+    &:hover { color: $white; padding-left: 10px; }
+    &:hover .ic { transform: rotate(45deg); }
+}
+
+.ct-k { display: block; margin-bottom: 2px; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: #DCE5FF; }
+.ct-v { font-size: 17px; font-weight: 600; }
+
+// ─── Formulario ──────────────────────────────────────────────
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 36px;
+    border-radius: 28px;
+    background: $white;
+    color: $ink;
+    box-shadow: 0 44px 80px -40px rgba($deep, .7);
+
+    @include below(560px) { padding: 26px 20px; }
+}
+
+.f2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+    gap: 20px;
+}
+
+.fld { display: flex; flex-direction: column; gap: 8px; }
+.fld-set { margin: 0; padding: 0; border: 0; min-width: 0; }
+.fld-set legend { padding: 0; margin-bottom: 8px; }
+
+.fl { font-size: 13px; font-weight: 600; color: $text-2; }
+
+.inp {
+    min-height: 52px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1.5px solid $line;
+    background: $off;
+    color: $ink;
+    font: inherit;
+    font-size: 16px;
+    transition: border-color .25s, background .25s, box-shadow .25s;
+
+    &::placeholder { color: #66749A; }
+
+    &:focus {
+        outline: none;
+        border-color: $cobalt;
+        background: $white;
+        box-shadow: 0 0 0 4px rgba($cobalt, .14);
+    }
+
+    &[aria-invalid='true'] { border-color: #C2410C; background: #FFF7F2; }
+}
+
+textarea.inp { min-height: 132px; resize: vertical; line-height: 1.55; }
+
+.f-err {
+    margin: 0;
+    min-height: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #B3380A;
+
+    &:empty { display: none; }
+}
+
+.f-status {
+    margin: 0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #FFF1E8;
+    color: #9A3412;
+    font-size: 14px;
+    font-weight: 600;
+
+    &:empty { display: none; }
+}
+
+// Temas como radios con estilo de chip (funcionan sin JS).
+.topics { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.tp {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1.5px solid $line;
+    background: $white;
+    color: $text-2;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .25s, color .25s, border-color .25s, transform .25s;
+
+    input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+
+    &:hover { border-color: $cobalt; color: $cobalt; }
+    &:active { transform: scale(.96); }
+
+    &:has(input:checked) { background: $cobalt; border-color: $cobalt; color: $white; }
+    &:has(input:focus-visible) { outline: 2px solid $sky; outline-offset: 3px; }
+}
+
+.f-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.f-note { margin: 0; font-size: 13px; color: $muted; }
+
+// Campo trampa: fuera de la vista y del lector de pantalla.
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+// Estados del botón de envío.
+.btn-idle, .btn-busy { display: inline-flex; align-items: center; gap: 10px; }
+.btn-busy { display: none; }
+.btn.is-sending .btn-idle { display: none; }
+.btn.is-sending .btn-busy { display: inline-flex; }
+
+.spin {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba($white, .35);
+    border-top-color: $white;
+    animation: spin .8s linear infinite;
+}
+
+.ok {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 28px 0;
+    animation: fadeUp .6s $ease-out both;
+
+    h3 { margin: 0; font-size: 28px; letter-spacing: -.03em; outline: none; }
+    p { margin: 0; color: $muted; font-size: 16px; line-height: 1.6; }
+}
+
+.ok-c {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px; height: 68px;
+    border-radius: 50%;
+    background: $cobalt;
+    color: $white;
+    animation: pop .6s $ease-spring both;
+
+    .ic { width: 30px; height: 30px; stroke-width: 2.4; }
+    path { stroke-dasharray: 30; stroke-dashoffset: 30; animation: dash .5s ease .35s forwards; }
+}

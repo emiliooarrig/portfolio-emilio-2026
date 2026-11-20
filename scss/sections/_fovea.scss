@@ -1,0 +1,359 @@
+// ─────────────────────────────────────────────────────────────
+// "conoce: Fovea" — la sección llega con los colores del portafolio
+// (azul + blanco). Cuando ocupa toda la pantalla, app.js agrega
+// `html.is-fovea`: un círculo Violet nace del centro y cubre la página,
+// y textos, menú y barra de progreso pasan a la paleta Bone & Violet.
+// Al terminar la sección, el círculo se cierra y todo regresa.
+// ─────────────────────────────────────────────────────────────
+
+@include register-colors($fov-palette);
+
+.fov {
+    @include use-palette($fov-palette, 1);
+    position: relative;
+    // `clip` recorta el orbe sin crear contenedor de scroll (con `hidden`, el
+    // `position: sticky` de .fov-stick dejaría de funcionar).
+    overflow: clip;
+    padding: 120px 0 0;
+    color: var(--fov-fg);
+    font-family: $font-fv-sans;
+    transition: palette-transition($fov-palette, $fov-color-dur, $ease-std, $fov-color-delay);
+
+    .is-fovea & { @include use-palette($fov-palette, 2); }
+
+    .btn { font-family: $font-fv-sans; }
+
+    .todo { border-color: var(--fov-todo-line); color: var(--fov-todo-fg); background: var(--fov-todo-bg); }
+}
+
+// Sin JavaScript no hay cambio animado: la sección se queda en Violet.
+@media (scripting: none) {
+    .fov { @include use-palette($fov-palette, 2); background: $fv-wash; }
+}
+
+// El morado. Es fijo al viewport y va detrás del contenido (z-index -1).
+// Se ve a través de esta sección, que es transparente, y de las vecinas
+// (.fov-near), cuyo fondo baja a una capa aún más atrás (z-index -2).
+// El resto de las secciones tienen fondo propio y lo tapan.
+.fov-wash {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: $fv-wash;
+    clip-path: circle(0% at 50% 50%);
+    transition: clip-path $fov-dur $fov-ease;
+
+    // 70.7% del radio de referencia llega justo a las esquinas.
+    .is-fovea & { clip-path: circle(72% at 50% 50%); }
+}
+
+.fov-near {
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+    }
+
+    &.off  { background: transparent; &::before { background: $off; } }
+    &.dark { background: transparent; &::before { background: $navy; } }
+}
+
+.fov-orb {
+    position: absolute;
+    right: -220px; top: 200px;
+    width: 640px; height: 640px;
+    border-radius: 50%;
+    border: 1.5px solid var(--fov-orb);
+    animation: breathe 10s ease-in-out infinite;
+}
+
+.fov-in { position: relative; }
+
+.fov-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.fov-k { margin: 0; display: flex; flex-direction: column; gap: 6px; font-weight: 400; }
+
+.fov-k1 {
+    font-size: clamp(22px, 2.4vw, 34px);
+    font-weight: 500;
+    letter-spacing: -.01em;
+    color: var(--fov-accent);
+}
+
+.fov-k2 {
+    display: block;
+    font-family: $font-fv-serif;
+    font-weight: 400;
+    font-size: clamp(96px, 14vw, 210px);
+    line-height: .95;
+    letter-spacing: -.02em;
+    color: var(--fov-fg);
+    font-kerning: normal;
+    font-synthesis: none;
+    white-space: nowrap;
+}
+
+.fov-word {
+    display: inline-block;
+    transition: color .4s, transform .6s $ease-spring;
+
+    &:hover { color: var(--fov-accent); transform: translateY(-6px); }
+}
+
+// ─── Ojo / fóvea ─────────────────────────────────────────────
+.eye {
+    position: relative;
+    flex: none;
+    width: 280px; height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover .eye-iris { width: 150px; height: 150px; }
+    &:hover .eye-pupil { width: 30px; height: 30px; }
+
+    @include below(560px) { width: 220px; height: 220px; }
+}
+
+.eye-r { position: absolute; border-radius: 50%; border: 1.5px solid var(--fov-ring); }
+.r1 { inset: 0; border-style: dashed; animation: spin 40s linear infinite; }
+.r2 { inset: 30px; border-style: dotted; border-color: var(--fov-ring-2); animation: spin 26s linear infinite reverse; }
+.r3 { inset: 60px; border-color: var(--fov-line); }
+
+.eye-x { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--fov-line); }
+.eye-y { position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--fov-line); }
+
+.eye-iris {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: var(--fov-iris);
+    animation: irisPulse 4.5s ease-in-out infinite;
+    transition: width .5s $ease-spring, height .5s $ease-spring;
+}
+
+.eye-pupil {
+    position: relative;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--fov-pupil);
+    animation: look 7s ease-in-out infinite;
+    transition: width .4s, height .4s;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 9px; left: 10px;
+        width: 11px; height: 11px;
+        border-radius: 50%;
+        background: var(--fov-on-fill);
+    }
+}
+
+// ─── Contenido ───────────────────────────────────────────────
+.fov-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 72px;
+    align-items: start;
+    margin-top: 72px;
+
+    @include below($bp-nav) { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+}
+
+.fov-lead { margin: 0; font-size: clamp(20px, 1.8vw, 24px); line-height: 1.5; color: var(--fov-text); text-wrap: pretty; }
+
+.fov-q {
+    margin: 32px 0 0;
+    padding: 0;
+    font-size: clamp(24px, 2.2vw, 30px);
+    font-style: italic;
+    line-height: 1.3;
+    color: var(--fov-accent);
+    text-wrap: balance;
+}
+
+.fov-role { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; font-size: 15px; color: var(--fov-text); }
+
+.fov-role-k {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--fov-fill);
+    color: var(--fov-on-fill);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.fov-url { margin: 18px 0 0; font-size: 13.5px; color: var(--fov-soft); }
+
+.fov-sl { margin: 0 0 12px; font-size: 12.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--fov-accent); }
+
+.svc {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--fov-line);
+
+    li {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px 12px;
+        border-bottom: 1px solid var(--fov-line);
+        transition: padding .45s $ease-std, color .3s;
+
+        // Barrido de color al pasar el cursor.
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: var(--fov-fill);
+            transform: scaleX(0);
+            transform-origin: 0 50%;
+            transition: transform .5s $ease-std;
+        }
+
+        &:hover { padding-left: 26px; color: var(--fov-on-fill); }
+        &:hover::before { transform: scaleX(1); }
+        &:hover .svc-n, &:hover .svc-t small { color: var(--fov-on-fill); }
+
+        .ic { opacity: 0; transform: translateX(-10px); transition: opacity .3s, transform .45s $ease-std; }
+        &:hover .ic { opacity: 1; transform: none; }
+    }
+}
+
+.svc-n { font-family: $font-mono; font-size: 12px; color: var(--fov-accent); transition: color .3s; }
+
+.svc-t {
+    flex: 1;
+    font-family: $font-fv-serif;
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.2;
+
+    small {
+        display: block;
+        margin-top: 4px;
+        font-family: $font-fv-sans;
+        font-size: 14px;
+        color: var(--fov-soft);
+        transition: color .3s;
+    }
+}
+
+.fov-mq {
+    margin: 96px 0 0;
+    border-color: var(--fov-line);
+    border-bottom: 0;
+
+    .mq { animation-duration: 34s; }
+
+    .mq-g span {
+        font-family: $font-fv-serif;
+        font-style: italic;
+        font-weight: 400;
+        letter-spacing: -.01em;
+        color: var(--fov-fg);
+    }
+
+    .mq-g b { width: 12px; height: 12px; border-radius: 50%; transform: none; background: var(--fov-accent); }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Pausa de scroll (escritorio, con JS y sin "reducir movimiento").
+// app.js agrega .fov-pin-on, le da a .fov-pin la altura del recorrido y
+// pone --p (avance 0–1) en .fov-pin y --s (0 = oculto, 1 = visible) en
+// cada servicio. Los !important ganan a las animaciones de revelado (rv).
+// ─────────────────────────────────────────────────────────────
+.fov-cue { display: none; }
+
+.fov-pin-on {
+    .fov-stick {
+        position: sticky;
+        top: var(--nav-h, 76px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: calc(100vh - var(--nav-h, 76px));
+        overflow: clip;
+
+        .fov-grid { margin-top: 0; width: 100%; }
+    }
+
+    .svc li {
+        opacity: calc(.08 + var(--s, 0) * .92) !important;
+        translate: 0 calc((1 - var(--s, 0)) * 28px) !important;
+        filter: blur(calc((1 - var(--s, 0)) * 4px));
+        animation: none !important;
+        transition: padding .45s $ease-std, color .3s !important;
+        will-change: opacity, translate;
+
+        // El número se enciende cuando el servicio queda visible.
+        .svc-n { transition: color .3s, transform .5s $ease-spring; }
+        &.is-lit .svc-n { transform: scale(1.18); font-weight: 700; }
+        &:not(.is-lit) .svc-n { color: var(--fov-soft); }
+    }
+
+    .fov-cue {
+        position: absolute;
+        left: 0; right: 0; bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        color: var(--fov-soft);
+        font-size: 12.5px;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        pointer-events: none;
+        transition: opacity .5s, translate .5s $ease-std;
+
+        @media (max-height: 700px) { bottom: 8px; }
+    }
+
+    &.is-done .fov-cue { opacity: 0; translate: 0 10px; }
+
+    .fov-mouse {
+        position: relative;
+        flex: none;
+        width: 20px; height: 32px;
+        border: 1.5px solid var(--fov-accent);
+        border-radius: 12px;
+
+        i {
+            position: absolute;
+            left: 50%; top: 6px;
+            width: 3px; height: 7px;
+            margin-left: -1.5px;
+            border-radius: 2px;
+            background: var(--fov-accent);
+            animation: fovWheel 1.6s ease-in-out infinite;
+        }
+    }
+
+    .fov-cue-n { font-family: $font-mono; }
+    .fov-cue-n b { color: var(--fov-fg); font-weight: 500; }
+}
+
+@keyframes fovWheel {
+    0%   { opacity: 0; transform: translateY(0); }
+    30%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(12px); }
+}

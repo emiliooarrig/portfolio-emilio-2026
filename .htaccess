@@ -1,0 +1,7 @@
+# Si el servidor apunta a la raíz del proyecto en lugar de /public,
+# esto redirige todo a /public y bloquea el acceso a código, .env y vendor.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(\.env|composer\.(json|lock)|app/|config/|database/|data/|storage/|vendor/|scss/|bin/) - [F,L]
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

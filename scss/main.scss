@@ -1,0 +1,36 @@
+// ─────────────────────────────────────────────────────────────
+// Portafolio Emilio Guzmán — punto de entrada de estilos
+// Compilar: composer build:css   ·   en vivo: composer watch:css
+// ─────────────────────────────────────────────────────────────
+
+@import 'abstracts/tokens';
+@import 'abstracts/mixins';
+
+@import 'base/base';
+@import 'base/buttons';
+
+@import 'layout/nav';
+@import 'layout/footer';
+@import 'layout/cursor';
+
+@import 'sections/hero';
+@import 'sections/manifesto';
+@import 'sections/about';
+@import 'sections/stack';
+@import 'sections/process';
+@import 'sections/projects';
+@import 'sections/case-dialog';
+@import 'sections/fovea';
+@import 'sections/experience';
+@import 'sections/certifications';
+@import 'sections/contact';
+@import 'sections/errors';
+
+@import 'components/alerts';
+
+// El movimiento va al final: sus reglas deben ganar a las de cada sección.
+@import 'motion/keyframes';
+@import 'motion/scroll';
+@import 'motion/fallback';
+@import 'motion/utilities';
+@import 'motion/reduced';

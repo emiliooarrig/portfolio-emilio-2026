@@ -1,0 +1,54 @@
+@mixin below($bp) {
+    @media (max-width: $bp) { @content; }
+}
+
+@mixin above($bp) {
+    @media (min-width: $bp + 1) { @content; }
+}
+
+// Encabezado de sección en dos columnas que se apila en móvil.
+@mixin split-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    gap: 48px;
+    align-items: end;
+
+    @include below($bp-nav) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+}
+
+// ─── Paletas que cambian con transición ─────────────────────
+// Registra cada color como propiedad CSS tipada: así el navegador puede
+// interpolarlo (un var() sin registrar cambiaría de golpe). El valor
+// inicial es el del portafolio.
+@mixin register-colors($palette) {
+    @each $name, $pair in $palette {
+        @property --#{$name} {
+            syntax: '<color>';
+            inherits: true;
+            initial-value: nth($pair, 1);
+        }
+    }
+}
+
+// Asigna una paleta: 1 = portafolio, 2 = Fovea.
+@mixin use-palette($palette, $i) {
+    @each $name, $pair in $palette {
+        --#{$name}: #{nth($pair, $i)};
+    }
+}
+
+// transition: --a 1s ease .5s, --b 1s ease .5s, …
+@function palette-transition($palette, $dur, $ease, $delay: 0s) {
+    $list: ();
+    @each $name, $pair in $palette {
+        $list: append($list, unquote('--#{$name}') $dur $ease $delay, comma);
+    }
+    @return $list;
+}
+
+@mixin chip-shadow {
+    box-shadow: 0 14px 30px -12px rgba($ink, .3);
+}

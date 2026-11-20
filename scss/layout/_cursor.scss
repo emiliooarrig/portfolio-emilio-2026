@@ -1,0 +1,144 @@
+// ─────────────────────────────────────────────────────────────
+// Cursor personalizado (solo con mouse y sin "reducir movimiento").
+// app.js crea el elemento, agrega `html.has-cursor` y cambia el estado
+// según lo que haya bajo el puntero:
+//   .is-link   enlaces y botones: el círculo crece
+//   .is-cta    CTA: se llena y muestra una palabra (data-cursor="Abrir")
+//   .is-text   campos de texto: se oculta y queda el cursor nativo
+//   .is-light  sobre fondos oscuros, cobalto o Fovea
+// ─────────────────────────────────────────────────────────────
+
+$cur-size:      36px;
+$cur-size-link: 60px;
+$cur-size-cta:  92px;
+$cur-dot:       6px;
+
+.has-cursor,
+.has-cursor * { cursor: none !important; }
+
+.has-cursor :is(input:not([type='radio']):not([type='checkbox']), textarea, select) { cursor: auto !important; }
+
+.cur {
+    --cur-c: #{$cobalt};
+    --cur-tint: #{rgba($cobalt, .1)};
+    --cur-fill: #{$cobalt};
+    --cur-ink: #{$white};
+
+    position: fixed;
+    top: 0; left: 0;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s ease;
+
+    .has-cursor & { opacity: 1; }
+    .has-cursor &.is-text,
+    .has-cursor &.is-out { opacity: 0; }
+
+    &.is-light {
+        --cur-c: #{$white};
+        --cur-tint: #{rgba($white, .14)};
+        --cur-fill: #{$white};
+        --cur-ink: #{$ink};
+    }
+
+    .is-fovea &.is-light {
+        --cur-c: #{$fv-bone};
+        --cur-tint: #{rgba($fv-bone, .14)};
+        --cur-fill: #{$fv-bone};
+        --cur-ink: #{$fv-deep};
+    }
+}
+
+// app.js mueve estas dos capas con transform: el punto va pegado al
+// puntero y el anillo lo sigue con retraso.
+.cur-ring,
+.cur-dot {
+    position: fixed;
+    top: 0; left: 0;
+    will-change: transform;
+}
+
+// El círculo. app.js lo estira en la dirección del movimiento (transform);
+// el tamaño y el "clic" usan width/height y scale para no pisarse.
+.cur-c {
+    position: absolute;
+    top: 0; left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $cur-size;
+    height: $cur-size;
+    translate: -50% -50%;
+    border-radius: 50%;
+    border: 1.5px solid var(--cur-c);
+    background-color: transparent;
+    transition:
+        width .5s $ease-out,
+        height .5s $ease-out,
+        scale .35s $ease-spring,
+        background-color .35s ease,
+        border-color .35s ease;
+
+    // Onda al hacer clic.
+    &::after {
+        content: '';
+        position: absolute;
+        inset: -1.5px;
+        border-radius: 50%;
+        border: 1.5px solid var(--cur-c);
+        opacity: 0;
+    }
+
+    .is-link & {
+        width: $cur-size-link;
+        height: $cur-size-link;
+        background-color: var(--cur-tint);
+    }
+
+    .is-cta & {
+        width: $cur-size-cta;
+        height: $cur-size-cta;
+        border-color: var(--cur-fill);
+        background-color: var(--cur-fill);
+    }
+
+    .is-down & { scale: .82; }
+    .is-click &::after { animation: curRipple .6s $ease-out; }
+}
+
+// La palabra del CTA.
+.cur-l {
+    font-family: $font-display;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--cur-ink);
+    opacity: 0;
+    scale: .6;
+    translate: 0 8px;
+    transition: opacity .2s ease, scale .2s ease, translate .2s ease, color .35s ease;
+
+    .is-cta & {
+        opacity: 1;
+        scale: 1;
+        translate: 0 0;
+        transition: opacity .35s ease .08s, scale .55s $ease-spring .08s, translate .55s $ease-spring .08s, color .35s ease;
+    }
+}
+
+.cur-dot i {
+    position: absolute;
+    top: 0; left: 0;
+    width: $cur-dot;
+    height: $cur-dot;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background-color: var(--cur-c);
+    transition: scale .35s $ease-std, background-color .35s ease;
+
+    .is-link &,
+    .is-cta & { scale: 0; }
+}

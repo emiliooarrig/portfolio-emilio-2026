@@ -1,0 +1,38 @@
+[
+    {
+        "icon": "cap",
+        "issuer": "Universidad Anáhuac",
+        "year": null,
+        "title": "Ingeniería en Sistemas y Tecnologías de la Información",
+        "status": "Por concluir",
+        "url": null,
+        "placeholder": false
+    },
+    {
+        "icon": "award",
+        "issuer": "Oracle Academy · Competencias Digitales Anáhuac",
+        "year": null,
+        "title": "Inteligencia artificial con machine learning en Java",
+        "status": "En curso",
+        "url": "",
+        "placeholder": false
+    },
+    {
+        "icon": "award",
+        "issuer": null,
+        "year": null,
+        "title": null,
+        "status": "Vigente",
+        "url": "",
+        "placeholder": true
+    },
+    {
+        "icon": "plus",
+        "issuer": null,
+        "year": null,
+        "title": null,
+        "status": "Vigente",
+        "url": "",
+        "placeholder": true
+    }
+]

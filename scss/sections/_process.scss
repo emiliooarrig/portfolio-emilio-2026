@@ -1,0 +1,163 @@
+.pr-head { @include split-head; }
+
+.proc {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    gap: 32px;
+    margin: 64px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.proc-line {
+    position: absolute;
+    top: 28px; left: 0; right: 0;
+    height: 1.5px;
+    background: $cobalt;
+    transform-origin: 0 50%;
+
+    @include below(1100px) { display: none; }
+}
+
+.step {
+    &:hover .step-n { background: $cobalt; color: $white; transform: scale(1.12); }
+
+    h3 { margin: 24px 0 10px; font-size: 22px; letter-spacing: -.025em; }
+    p { margin: 0; color: $muted; font-size: 15.5px; line-height: 1.6; }
+}
+
+.step-n {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: $white;
+    border: 1.5px solid $cobalt;
+    color: $cobalt;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background .35s, color .35s, transform .45s $ease-spring, box-shadow .45s;
+}
+
+.proc-meta { display: none; }
+
+// ─────────────────────────────────────────────────────────────
+// Modo horizontal (escritorio, con JS y sin "reducir movimiento").
+// app.js agrega .proc-h, le da a la sección la altura del recorrido y,
+// en cada frame, mueve la pista (transform) y pone en cada paso --s
+// (0 = apagado, 1 = encendido) y en la sección --p (avance 0–1).
+// Los !important ganan a las animaciones de revelado (rv, draw-x).
+// ─────────────────────────────────────────────────────────────
+$proc-step-w: clamp(340px, 36vw, 500px);
+
+.proc-h {
+    padding: 0;
+
+    .proc-stick {
+        position: sticky;
+        top: var(--nav-h, 76px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 56px;
+        height: calc(100vh - var(--nav-h, 76px));
+        overflow: hidden;
+
+        @media (max-height: 760px) { gap: 36px; }
+    }
+
+    .proc-vp { overflow: visible; }
+
+    .proc {
+        display: flex;
+        width: max-content;
+        margin: 0;
+        will-change: transform;
+    }
+
+    // La línea recorre toda la pista y se dibuja con el avance.
+    .proc-line {
+        display: block;
+        right: calc(#{$proc-step-w} - 56px);
+        background: linear-gradient(90deg, $cobalt, $cobalt) 0 0 / calc(var(--p, 0) * 100%) 100% no-repeat, $line-strong;
+        transform: none !important;
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .step {
+        flex: none;
+        width: $proc-step-w;
+        padding-right: 72px;
+        opacity: 1 !important;
+        translate: none !important;
+        animation: none !important;
+        transition: none !important;
+
+        // El círculo se queda sobre la línea; el texto sube y se aclara.
+        .step-n { opacity: calc(.35 + var(--s, 0) * .65); }
+
+        h3, p {
+            opacity: calc(.16 + var(--s, 0) * .84);
+            translate: 0 calc((1 - var(--s, 0)) * 26px);
+        }
+
+        h3 { font-size: clamp(24px, 2.2vw, 32px); }
+        p { max-width: 36ch; font-size: 16.5px; }
+    }
+
+    // Paso encendido: el círculo se llena y el número pasa a blanco.
+    .step.is-lit .step-n {
+        background: $cobalt;
+        color: $white;
+        box-shadow: 0 0 0 8px rgba($cobalt, .1);
+    }
+
+    .proc-meta {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        color: $muted;
+        font-size: 12.5px;
+        letter-spacing: .06em;
+    }
+
+    .proc-count b { color: $ink; font-weight: 500; }
+
+    .proc-bar {
+        position: relative;
+        flex: 1;
+        max-width: 240px;
+        height: 2px;
+        overflow: hidden;
+        border-radius: 2px;
+        background: $line;
+
+        i {
+            position: absolute;
+            inset: 0;
+            background: $cobalt;
+            transform-origin: 0 50%;
+            transform: scaleX(var(--p, 0));
+        }
+    }
+
+    .proc-hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        text-transform: uppercase;
+        transition: opacity .4s;
+
+        .ic { width: 15px; height: 15px; animation: nudgeX 1.6s ease-in-out infinite; }
+    }
+
+    &.is-end .proc-hint { opacity: 0; }
+}
+
+@keyframes nudgeX { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }

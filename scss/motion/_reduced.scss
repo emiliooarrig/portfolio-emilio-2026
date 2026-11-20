@@ -1,0 +1,11 @@
+// Respeta "reducir movimiento" del sistema operativo.
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .prog { display: none; }
+}

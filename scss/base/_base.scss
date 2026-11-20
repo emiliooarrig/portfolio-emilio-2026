@@ -1,0 +1,156 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    margin: 0;
+    background: $white;
+    color: $ink;
+    font-family: $font-body;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+
+    &.is-locked { overflow: hidden; }
+}
+
+[hidden] { display: none !important; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: $cobalt; text-decoration: none; }
+a:hover { color: $cobalt-dark; }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid $sky;
+    outline-offset: 3px;
+}
+
+section[id] { scroll-margin-top: 88px; }
+
+// ─── Utilidades ──────────────────────────────────────────────
+.sr-only {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0);
+    white-space: nowrap; border: 0;
+}
+
+.skip {
+    position: absolute;
+    left: 16px; top: -80px;
+    z-index: 100;
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: $ink;
+    color: $white;
+    font-weight: 600;
+    transition: top .25s;
+
+    &:focus { top: 16px; color: $white; }
+}
+
+.ff-d { font-family: $font-display; }
+.ff-m { font-family: $font-mono; }
+.ff-s { font-family: $font-fv-serif; font-weight: 400; }
+
+.wrap {
+    width: 100%;
+    max-width: $container;
+    margin: 0 auto;
+    padding: 0 $gutter;
+
+    @include below(560px) { padding: 0 20px; }
+}
+
+.sec { position: relative; padding: 96px 0; }
+.dark { background: $navy; color: $white; }
+.ice { background: $ice; }
+.off { background: $off; }
+
+.lbl {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 20px;
+    font-size: 12.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: $cobalt;
+    font-weight: 500;
+
+    &::before { content: ''; width: 28px; height: 1.5px; background: currentColor; }
+
+    .dark & { color: $sky; }
+}
+
+.h2 {
+    margin: 0;
+    font-size: clamp(32px, 3.6vw, 52px);
+    line-height: 1.08;
+    letter-spacing: -.035em;
+    font-weight: 700;
+    text-wrap: balance;
+}
+
+.lead {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.65;
+    color: $muted;
+    text-wrap: pretty;
+
+    .dark & { color: $on-navy; }
+}
+
+.ic {
+    width: 18px; height: 18px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+// Placeholder visible para datos pendientes.
+.todo {
+    font-family: $font-mono;
+    font-size: .86em;
+    padding: 1px 6px;
+    border-radius: 6px;
+    border: 1px dashed #8FA6E6;
+    color: $cobalt-dark;
+    background: #F2F5FF;
+    overflow-wrap: anywhere;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+
+    .dark & { border-color: #5B74C2; color: #C9D7FF; background: rgba($sky, .1); }
+    .cobalt & { border-color: rgba($white, .6); color: $white; background: rgba($white, .12); }
+}
+
+// Subrayado animado.
+.ul {
+    padding-bottom: 2px;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat;
+    transition: background-size .35s $ease-std;
+
+    &:hover { background-size: 100% 1.5px; }
+}
+
+.dot {
+    width: 8px; height: 8px;
+    flex: none;
+    border-radius: 50%;
+    background: $glow;
+    animation: pulse 2s ease-out infinite;
+}
+
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+
+// Controles que solo tienen sentido con JavaScript.
+.no-js [data-requires-js] { display: none !important; }

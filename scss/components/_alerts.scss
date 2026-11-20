@@ -1,0 +1,248 @@
+// ─────────────────────────────────────────────────────────────
+// Alerta — modales y toasts al estilo SweetAlert (public/assets/js/alerts.js).
+// Se usa en el sitio y en el panel; reemplaza alert() y confirm().
+// ─────────────────────────────────────────────────────────────
+
+$al-success: #16A34A;
+$al-error:   #DC2626;
+$al-warning: #D97706;
+$al-info:    $cobalt;
+$al-question: #475569;
+
+$al-colors: (
+    'success':  $al-success,
+    'error':    $al-error,
+    'warning':  $al-warning,
+    'info':     $al-info,
+    'question': $al-question,
+);
+
+// ─── Modal ───────────────────────────────────────────────────
+.al {
+    width: min(440px, calc(100% - 32px));
+    max-width: none;
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $ink;
+    overflow: visible;
+
+    &::backdrop {
+        background: rgba($deep, .55);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        animation: alFade .25s ease both;
+    }
+
+    &.is-closing::backdrop { animation: alFade .2s ease reverse both; }
+}
+
+.al-box {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 36px 28px 26px;
+    border-radius: 24px;
+    background: $white;
+    box-shadow: 0 40px 80px -30px rgba($deep, .55);
+    text-align: center;
+    animation: alIn .45s $ease-spring both;
+
+    .is-closing & { animation: alOut .2s ease both; }
+}
+
+.al-t {
+    margin: 8px 0 0;
+    font-family: $font-display;
+    font-size: 22px;
+    line-height: 1.25;
+    letter-spacing: -.025em;
+    text-wrap: balance;
+}
+
+.al-x {
+    margin: 0;
+    max-width: 34ch;
+    color: $muted;
+    font-family: $font-body;
+    font-size: 15.5px;
+    line-height: 1.6;
+    text-wrap: pretty;
+}
+
+.al-a {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 18px;
+}
+
+.al-b {
+    flex: 1 1 140px;
+    min-height: 48px;
+    padding: 0 20px;
+    border: 1.5px solid transparent;
+    border-radius: 14px;
+    font-family: $font-body;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, color .2s, transform .2s $ease-std;
+
+    &:active { transform: scale(.97); }
+    &:focus-visible { outline: 3px solid rgba($cobalt, .35); outline-offset: 2px; }
+
+    &--ok { background: $cobalt; color: $white; &:hover { background: $cobalt-dark; } }
+    &--danger { background: $al-error; color: $white; &:hover { background: darken($al-error, 8%); } }
+
+    &--ghost {
+        background: $white;
+        border-color: $line-strong;
+        color: $ink;
+
+        &:hover { background: $ice; border-color: $cobalt; color: $cobalt-dark; }
+    }
+}
+
+// Barra de tiempo (timer).
+.al-timer {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 4px;
+    background: $ice;
+
+    i {
+        display: block;
+        height: 100%;
+        background: $cobalt;
+        transform-origin: 0 50%;
+        animation: alTimer linear both; // la duración la pone alerts.js
+    }
+}
+
+// ─── Íconos animados ─────────────────────────────────────────
+.al-ic {
+    width: 84px;
+    height: 84px;
+
+    svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+    circle, path {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    // Halo suave detrás del trazo.
+    .al-halo { stroke-width: 0; fill: currentColor; opacity: .1; }
+    .al-dot { fill: currentColor; stroke: none; }
+
+    // Dibujado: pathLength="100" en el SVG.
+    .al-ring { stroke-dasharray: 100; stroke-dashoffset: 100; animation: alDraw .5s ease-out .05s forwards; }
+    .al-mark { stroke-dasharray: 100; stroke-dashoffset: 100; animation: alDraw .4s ease-out .4s forwards; }
+    .al-dot  { opacity: 0; animation: alPop .3s $ease-spring .55s forwards; }
+
+    @each $name, $color in $al-colors {
+        &--#{$name} { color: $color; }
+    }
+
+    &--error .al-mark { animation-duration: .35s; }
+    &--warning svg, &--question svg { animation: alNudge .6s ease-in-out .75s; }
+}
+
+// ─── Toasts ──────────────────────────────────────────────────
+.al-toasts {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 900;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    width: min(380px, calc(100% - 32px));
+    pointer-events: none;
+
+    @include below(560px) { top: auto; bottom: 16px; right: 16px; }
+}
+
+.al-toast {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 14px 16px;
+    border: 1px solid $line;
+    border-radius: 16px;
+    background: $white;
+    box-shadow: 0 22px 44px -24px rgba($deep, .45);
+    color: $ink;
+    font-family: $font-body;
+    pointer-events: auto;
+    animation: alToastIn .45s $ease-spring both;
+
+    &.is-closing { animation: alToastOut .25s ease both; }
+
+    .al-ic { flex: none; width: 30px; height: 30px; }
+    .al-ic circle, .al-ic path { stroke-width: 7; }
+
+    .al-timer { height: 3px; background: transparent; }
+    &:hover .al-timer i { animation-play-state: paused; }
+
+    @each $name, $color in $al-colors {
+        &--#{$name} .al-timer i { background: $color; }
+    }
+}
+
+.al-toast-b { flex: 1; min-width: 0; padding-top: 4px; }
+.al-toast-t { display: block; font-size: 14.5px; font-weight: 700; line-height: 1.35; }
+.al-toast-x { display: block; margin-top: 2px; color: $muted; font-size: 13.5px; line-height: 1.5; }
+
+.al-close {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 30px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: $muted;
+    cursor: pointer;
+
+    &:hover { background: $ice; color: $ink; }
+    &:focus-visible { outline: 2px solid $cobalt; }
+
+    svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+}
+
+// ─── Movimiento ──────────────────────────────────────────────
+@keyframes alFade    { from { opacity: 0; } to { opacity: 1; } }
+@keyframes alIn      { 0% { opacity: 0; transform: scale(.7); } 45% { opacity: 1; transform: scale(1.04); } 100% { transform: scale(1); } }
+@keyframes alOut     { to { opacity: 0; transform: scale(.92); } }
+@keyframes alDraw    { to { stroke-dashoffset: 0; } }
+@keyframes alPop     { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+@keyframes alNudge   { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+@keyframes alTimer   { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@keyframes alToastIn  { from { opacity: 0; transform: translateX(40px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes alToastOut { to { opacity: 0; transform: translateX(40px); } }
+
+.al-dot { transform-box: fill-box; transform-origin: center; }
+.al-ic svg { transform-origin: 50% 50%; }
+
+@media (prefers-reduced-motion: reduce) {
+    .al-box, .al-toast, .al::backdrop { animation-duration: .01s !important; }
+    .al-ic .al-ring, .al-ic .al-mark { animation: none; stroke-dashoffset: 0; }
+    .al-ic .al-dot { animation: none; opacity: 1; }
+    .al-ic svg { animation: none !important; }
+}

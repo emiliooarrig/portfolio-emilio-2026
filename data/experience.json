@@ -1,0 +1,25 @@
+[
+    {
+        "start": null,
+        "end": "hoy",
+        "company": "Nokia",
+        "role": null,
+        "role_placeholder": "[TU PUESTO]",
+        "summary": null,
+        "summary_placeholder": "[Una o dos líneas sobre tu rol y los sistemas que atiendes]"
+    },
+    {
+        "start": null,
+        "end": "hoy",
+        "company": "Fovea Studio",
+        "role": "Cofundador · Líder técnico",
+        "summary": "Agencia de marketing y tecnología para PyMEs mexicanas. Sitios y sistemas a la medida, automatizaciones con WhatsApp Business y CRM, y dashboards de marca."
+    },
+    {
+        "start": null,
+        "end": "hoy",
+        "company": "Desarrollador full-stack independiente",
+        "role": "Clientes directos",
+        "summary": "Sistema de gestión interna multi-sucursal para La Llar, hoy en producción, y la refactorización del sitio de Dulce Tentación, repostería artesanal en Naucalpan."
+    }
+]

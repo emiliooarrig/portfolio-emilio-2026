@@ -1,0 +1,25 @@
+// ─────────────────────────────────────────────────────────────
+// Animaciones ligadas al scroll (Chrome/Edge 115+).
+// Se usa `forwards` y rangos que empiezan en `entry 0%`: si el
+// timeline no está activo, el elemento queda visible por defecto.
+// Firefox/Safari usan el respaldo con IntersectionObserver (_fallback).
+// ─────────────────────────────────────────────────────────────
+
+.px { transform: translateX(-6%); }
+.draw-x { transform-origin: 0 50%; }
+.draw-y { transform-origin: 50% 0; }
+
+@supports (animation-timeline: view()) {
+    .prog { animation: prog linear both; animation-timeline: scroll(root); }
+
+    .rv     { animation: rvUp linear forwards;    animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    .rv-s   { animation: rvScale linear forwards; animation-timeline: view(); animation-range: entry 0% cover 35%; }
+    .rv-l   { animation: rvLeft linear forwards;  animation-timeline: view(); animation-range: entry 0% cover 35%; }
+    .ml     { animation: dim linear forwards;     animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    .px     { animation: pxX linear forwards;     animation-timeline: view(); animation-range: entry 0% exit 100%; }
+    .draw-x { animation: drawX linear forwards;   animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    .draw-y { animation: drawY linear forwards;   animation-timeline: view(); animation-range: entry 0% cover 65%; }
+    .fw     { animation: fillWord linear forwards; animation-timeline: view(); animation-range: entry 0% cover 70%; }
+
+    .fov-word { animation: focusIn linear forwards; animation-timeline: view(); animation-range: entry 0% cover 35%; }
+}

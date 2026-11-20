@@ -1,0 +1,53 @@
+{
+    "name": "emiliooarrig/portfolio-emilio-2026",
+    "description": "Portafolio personal de Emilio Guzmán — PHP vanilla con MVC propio, SCSS y Composer.",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.1",
+        "ext-mbstring": "*",
+        "ext-pdo": "*",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "require-dev": {
+        "scssphp/scssphp": "^1.13"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+            "app/Core/helpers.php"
+        ]
+    },
+    "scripts": {
+        "build:css": "php bin/build-css.php",
+        "watch:css": [
+            "Composer\\Config::disableProcessTimeout",
+            "php bin/build-css.php --watch"
+        ],
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "php -S localhost:8000 -t public public/index.php"
+        ],
+        "admin:create": [
+            "Composer\\Config::disableProcessTimeout",
+            "php bin/console.php admin:create"
+        ],
+        "admin:password": [
+            "Composer\\Config::disableProcessTimeout",
+            "php bin/console.php admin:password"
+        ],
+        "certs:import": "php bin/console.php certs:import",
+        "experience:import": "php bin/console.php experience:import",
+        "db:migrate": "php bin/console.php db:migrate",
+        "db:seed": "php bin/console.php db:seed",
+        "post-install-cmd": [
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

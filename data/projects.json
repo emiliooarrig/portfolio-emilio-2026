@@ -1,0 +1,62 @@
+[
+    {
+        "id": "lallar",
+        "visual": "dash",
+        "featured": true,
+        "categories": ["dev", "ops", "data"],
+        "kicker": "Cliente · Full-stack",
+        "status": "En producción",
+        "live": true,
+        "title": "La Llar",
+        "subtitle": "Sistema de gestión interna multi-sucursal",
+        "description": "Plataforma para una empresa de soluciones alimentarias con varias cocinas: asistencia con lectores biométricos, dashboard de KPIs, aprobación de documentos y carga de facturas XML/PDF para contabilidad.",
+        "care": "Lo que más cuidé: que ninguna checada se pierda. Un agente en Python consulta los lectores por TCP/IP y, si la red falla, guarda los registros en SQLite hasta poder entregarlos. Además: documentación técnica versionada con arquitectura, diagramas ER y referencia de API.",
+        "stack": ["React", "Node.js", "MySQL", "Prisma", "Python", "Railway"],
+        "repo": null
+    },
+    {
+        "id": "pestalozzi",
+        "visual": "menu",
+        "featured": false,
+        "categories": ["dev"],
+        "kicker": "Practicum I · Equipo de 3",
+        "status": "En desarrollo",
+        "live": false,
+        "title": "Casa Pestalozzi",
+        "subtitle": "Ecosistema digital para restaurante",
+        "description": "Landing rediseñada con manual de marca, reservaciones web y módulos POS de menú dinámico y reservación de catas.",
+        "care": "Lo que más cuidé: el proceso. Trabajamos con una metodología propia de 6 fases: reunión inicial, planificación, diseño, desarrollo, despliegue y documentación final.",
+        "stack": ["PHP", "MySQL", "MVC"],
+        "repo": null
+    },
+    {
+        "id": "sello-blockchain",
+        "visual": "chain",
+        "featured": false,
+        "categories": ["data"],
+        "kicker": "SIS4413 · Anáhuac",
+        "status": "Proyecto final",
+        "live": false,
+        "title": "Sello de tiempo en blockchain",
+        "subtitle": "Prioridad científica para cuadernos de laboratorio",
+        "description": "Blockchain completo que demuestra cuándo existió un registro, usando hash, firma digital y encadenamiento de bloques.",
+        "care": "Lo que más cuidé: que cada pieza criptográfica sea demostrable —hash, firma digital y seguridad del encadenamiento— usando solo los temas del plan del curso.",
+        "stack": ["Hash", "Firma digital", "Criptografía"],
+        "repo": null
+    },
+    {
+        "id": "dia-ov",
+        "visual": "list",
+        "featured": false,
+        "categories": ["dev"],
+        "kicker": "Universidad Anáhuac",
+        "status": "Evento",
+        "live": false,
+        "title": "Auditores Día OV 2026",
+        "subtitle": "Asignación de auditores de talleres",
+        "description": "App interna para asignar alumnos como auditores de los talleres del Día OV, con un panel protegido para administración.",
+        "care": "Lo que más cuidé: la fricción. Los auditores entran solo con su correo, sin contraseña; la contraseña queda para el administrador.",
+        "stack": ["PHP", "MVC", "Composer"],
+        "repo": null
+    }
+]

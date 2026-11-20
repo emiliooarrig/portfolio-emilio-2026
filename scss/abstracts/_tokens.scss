@@ -1,0 +1,110 @@
+// ─── Paleta del portafolio (azul + blanco) ───────────────────
+$white:        #FFFFFF;
+$ink:          #0A1433;   // texto principal
+$navy:         #071029;   // secciones oscuras
+$deep:         #050B1F;   // footer
+$cobalt:       #1F47E0;   // acento principal
+$cobalt-dark:  #1636B8;
+$sky:          #8FB2FF;   // acento sobre fondos oscuros
+$glow:         #7CC4FF;   // indicadores de estado
+$ice:          #EEF3FF;
+$off:          #F7F9FE;
+$line:         #DCE4F5;
+$line-strong:  #C9D5F2;
+$muted:        #47557A;   // texto secundario (7:1 sobre blanco)
+$text-2:       #22305A;
+$on-navy:      #A9B7DA;
+$on-navy-2:    #DCE6FF;
+$on-navy-3:    #8E9CC4;
+
+// ─── Paleta de Fovea Studio (Bone & Violet) ─────────────────
+$fv-bone:      #FAF9F6;
+$fv-violet:    #534AB7;
+$fv-ink:       #1C1A36;
+$fv-lilac:     #B7B1F2;   // violeta claro para texto sobre Ink
+$fv-text:      #E8E6F2;
+$fv-muted:     #C9C5E0;
+$fv-lilac-hi:  #DCD9FA;   // acento sobre Violet (5:1)
+$fv-deep:      #2B2266;   // violeta profundo (matiz ~248°, L 27%): se distingue del navy #071029 (matiz ~223°, L 9%)
+$fv-plum:      #3D3290;   // violeta intermedio: bordes y fondos sutiles sobre $fv-deep
+$fv-wash:      $fv-deep;  // fondo de la página en modo Fovea (la capa .fov-wash)
+
+// ─── Cambio de paleta al entrar a Fovea ─────────────────────
+// El círculo morado dura $fov-dur; textos y detalles cambian a la mitad.
+$fov-dur:         .8s;
+$fov-ease:        cubic-bezier(.6, 0, .25, 1);
+$fov-color-dur:   .45s;
+$fov-color-delay: .2s;
+
+// Cada color tiene dos valores: (portafolio, Fovea).
+$fov-palette: (
+    'fov-fg':        ($ink,               $fv-bone),
+    'fov-text':      ($text-2,            $fv-text),
+    'fov-soft':      ($muted,             $fv-text),
+    'fov-accent':    ($cobalt,            $fv-lilac-hi),
+    'fov-fill':      ($cobalt,            $fv-violet),
+    'fov-on-fill':   ($white,             $fv-bone),
+    'fov-iris':      ($cobalt,            $fv-bone),
+    'fov-pupil':     ($ink,               $fv-violet),
+    'fov-line':      (rgba($ink, .12),    rgba($fv-bone, .2)),
+    'fov-ring':      (rgba($ink, .2),     rgba($fv-bone, .3)),
+    'fov-ring-2':    (rgba($cobalt, .45), rgba($fv-lilac-hi, .6)),
+    'fov-orb':       (rgba($cobalt, .14), rgba($fv-bone, .18)),
+    'fov-btn':       ($cobalt,            $fv-bone),
+    'fov-btn-fg':    ($white,             $fv-deep),
+    'fov-btn-hover': ($ink,               $fv-violet),
+    'fov-btn-line':  ($line-strong,       rgba($fv-bone, .4)),
+    'fov-todo-line': (#8FA6E6,            rgba($fv-bone, .55)),
+    'fov-todo-fg':   ($cobalt-dark,       $fv-bone),
+    'fov-todo-bg':   (#F2F5FF,            rgba($fv-plum, .6)),
+);
+
+// Secciones vecinas: Proyectos (arriba) y Experiencia (abajo).
+$fov-projects-palette: (
+    'pj-label': ($cobalt, $fv-lilac-hi),
+    'pj-title': ($ink,    $fv-bone),
+);
+
+$fov-exp-palette: (
+    'ex-accent':    ($sky,             $fv-lilac-hi),
+    'ex-track':     (rgba($sky, .18),  rgba($fv-bone, .2)),
+    'ex-hover':     (rgba($sky, .08),  rgba($fv-bone, .08)),
+    'ex-dot':       ($navy,            $fv-wash),
+    'ex-text':      ($on-navy,         $fv-text),
+    'ex-role':      ($on-navy-2,       $fv-bone),
+    'ex-btn-fg':    ($cobalt,          $fv-deep),
+    'ex-todo-line': (#5B74C2,          rgba($fv-bone, .55)),
+    'ex-todo-fg':   (#C9D7FF,          $fv-bone),
+    'ex-todo-bg':   (rgba($sky, .1),   rgba($fv-plum, .6)),
+);
+
+$fov-nav-palette: (
+    'nav-bg':     (rgba($white, .86), rgba($fv-wash, .9)),
+    'nav-line':   (rgba($ink, .07),   rgba($fv-bone, .14)),
+    'nav-fg':     ($ink,              $fv-bone),
+    'nav-accent': ($cobalt,           $fv-lilac-hi),
+    'nav-hover':  ($ice,              rgba($fv-bone, .12)),
+    'nav-cta':    ($cobalt,           $fv-bone),
+    'nav-cta-fg': ($white,            $fv-deep),
+    'nav-btn':    ($white,            rgba($fv-bone, 0)),
+    'nav-ring':   ($line-strong,      rgba($fv-bone, .4)),
+    'nav-sep':    (#E6ECF8,           rgba($fv-bone, .14)),
+);
+
+// ─── Tipografía ──────────────────────────────────────────────
+$font-display: 'Sora', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+$font-body:    'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+$font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+$font-fv-serif: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+$font-fv-sans:  'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+// ─── Movimiento ──────────────────────────────────────────────
+$ease-out:    cubic-bezier(.16, 1, .3, 1);
+$ease-std:    cubic-bezier(.2, .8, .2, 1);
+$ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+
+// ─── Layout ──────────────────────────────────────────────────
+$container:   1280px;
+$gutter:      32px;
+$bp-nav:      900px;
+$bp-md:       960px;

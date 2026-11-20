@@ -1,0 +1,64 @@
+.foot {
+    overflow: hidden;
+    padding: 80px 0 32px;
+    background: $deep;
+    color: $on-navy-2;
+}
+
+.f-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+    gap: 32px;
+
+    h3 {
+        margin: 0 0 16px;
+        font-size: 12px;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: $sky;
+        font-weight: 500;
+    }
+
+    ul { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+
+    a { color: $on-navy-2; }
+    a:hover { color: $white; }
+}
+
+.f-about { margin: 14px 0 0; max-width: 280px; color: $on-navy; line-height: 1.6; font-size: 14.5px; }
+.f-status-line { display: flex; align-items: center; gap: 10px; }
+
+.f-word {
+    margin: 64px 0 0;
+    white-space: nowrap;
+    font-size: 9.2vw;
+    line-height: .9;
+    letter-spacing: -.055em;
+    font-weight: 800;
+    color: $cobalt;
+    -webkit-text-stroke: 1.5px $cobalt;
+}
+
+.f-bot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgba($white, .1);
+    font-size: 13px;
+    color: $on-navy-3;
+}
+
+.totop {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: $on-navy-2;
+
+    &:hover { color: $white; }
+    .ic { transition: transform .35s; }
+    &:hover .ic { transform: translateY(-4px); }
+}

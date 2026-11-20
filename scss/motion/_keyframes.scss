@@ -1,0 +1,49 @@
+// Las animaciones de revelado usan `translate`/`scale` (propiedades
+// individuales) para no pisar los `transform` de los estados :hover.
+
+@keyframes rvUp     { from { opacity: 0; translate: 0 56px; } to { opacity: 1; translate: 0 0; } }
+@keyframes rvScale  { from { opacity: 0; scale: .92; translate: 0 30px; } to { opacity: 1; scale: 1; translate: 0 0; } }
+@keyframes rvLeft   { from { opacity: 0; translate: -60px 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes dim      { from { opacity: .14; translate: 0 26px; } to { opacity: 1; translate: 0 0; } }
+@keyframes pxX      { from { transform: translateX(-6%); } to { transform: translateX(4%); } }
+@keyframes drawX    { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes drawY    { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes fillWord { from { color: transparent; translate: 0 30%; } to { color: $cobalt; translate: 0 0; } }
+@keyframes prog     { to { transform: scaleX(1); } }
+
+@keyframes navIn    { from { opacity: 0; translate: 0 -100%; } to { opacity: 1; translate: 0 0; } }
+@keyframes lnUp     { from { transform: translateY(108%) rotate(2.5deg); } to { transform: none; } }
+@keyframes fadeUp   { from { opacity: 0; translate: 0 18px; } to { opacity: 1; translate: 0 0; } }
+@keyframes fade     { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut  { from { opacity: 1; } to { opacity: 0; } }
+@keyframes drop     { from { opacity: 0; translate: 0 -8px; } to { opacity: 1; translate: 0 0; } }
+@keyframes orbIn    { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
+@keyframes breathe  { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+@keyframes spin     { to { transform: rotate(360deg); } }
+@keyframes termIn   { from { opacity: 0; transform: translateY(40px) rotate(-5deg); } to { opacity: 1; transform: rotate(-2deg); } }
+@keyframes float    { 0%, 100% { transform: rotate(-2deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-10px); } }
+@keyframes bob      { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes blink    { 50% { opacity: 0; } }
+@keyframes drip     { to { top: 100%; } }
+@keyframes pulse    { 0% { box-shadow: 0 0 0 0 rgba($glow, .7); } 100% { box-shadow: 0 0 0 10px rgba($glow, 0); } }
+@keyframes pulseB   { 0% { box-shadow: 0 0 0 0 rgba($cobalt, .5); } 100% { box-shadow: 0 0 0 10px rgba($cobalt, 0); } }
+@keyframes bounceDot { 0%, 80%, 100% { transform: translateY(0); } 88% { transform: translateY(-6px); } }
+@keyframes mq       { to { transform: translateX(-50%); } }
+
+@keyframes cardIn   { from { opacity: 0; translate: 0 28px; scale: .98; } to { opacity: 1; translate: 0 0; scale: 1; } }
+@keyframes barUp    { from { transform: scaleY(.08); } to { transform: scaleY(1); } }
+@keyframes barWave  { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(.65); } }
+@keyframes slideIn  { from { opacity: 0; translate: -24px 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes blkGlow  { 0%, 100% { border-color: $line-strong; background: $white; } 12%, 30% { border-color: $cobalt; background: #F2F5FF; } }
+@keyframes assign   { 0%, 100% { background: $ice; color: $cobalt-dark; } 20%, 45% { background: $cobalt; color: $white; } }
+
+@keyframes mIn      { from { opacity: 0; translate: 0 34px; scale: .97; } to { opacity: 1; translate: 0 0; scale: 1; } }
+@keyframes mOut     { to { opacity: 0; translate: 0 16px; scale: .98; } }
+@keyframes pop      { from { opacity: 0; scale: .4; } to { opacity: 1; scale: 1; } }
+@keyframes dash     { to { stroke-dashoffset: 0; } }
+@keyframes curRipple { from { opacity: .6; scale: 1; } to { opacity: 0; scale: 1.9; } }
+
+// Fovea
+@keyframes focusIn  { from { opacity: 0; filter: blur(16px); letter-spacing: .12em; } to { opacity: 1; filter: blur(0); letter-spacing: -.02em; } }
+@keyframes look     { 0%, 100% { transform: translate(0, 0); } 20%, 40% { transform: translate(18px, -8px); } 55%, 75% { transform: translate(-16px, 10px); } }
+@keyframes irisPulse { 0%, 100% { scale: 1; } 50% { scale: 1.06; } }
