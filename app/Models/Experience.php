@@ -72,6 +72,8 @@ final class Experience
     }
 
     /**
+     * Se agrega al final de la lista, salvo que $data traiga sort_order (importación).
+     *
      * @param array<string, mixed> $data Ver ExperienceRequest::validated()
      */
     public static function create(array $data): int
@@ -80,7 +82,7 @@ final class Experience
         $pdo->prepare(
             'INSERT INTO experiences (company, role, summary, start_year, start_month, end_year, end_month, is_current, sort_order, is_published)
              VALUES (:company, :role, :summary, :start_year, :start_month, :end_year, :end_month, :is_current, :sort_order, :is_published)'
-        )->execute(self::params($data));
+        )->execute(self::params($data) + [':sort_order' => $data['sort_order'] ?? self::nextOrder()]);
 
         return (int) $pdo->lastInsertId();
     }
@@ -94,7 +96,7 @@ final class Experience
             'UPDATE experiences
              SET company = :company, role = :role, summary = :summary,
                  start_year = :start_year, start_month = :start_month, end_year = :end_year, end_month = :end_month,
-                 is_current = :is_current, sort_order = :sort_order, is_published = :is_published
+                 is_current = :is_current, is_published = :is_published
              WHERE id = :id'
         )->execute(self::params($data) + [':id' => $id]);
     }
@@ -109,7 +111,7 @@ final class Experience
 
     public static function nextOrder(): int
     {
-        return (int) Database::connection()->query('SELECT COALESCE(MAX(sort_order), 0) + 10 FROM experiences')->fetchColumn();
+        return Ordering::next('experiences');
     }
 
     /**
@@ -195,7 +197,6 @@ final class Experience
             ':end_year'     => $current ? null : $data['end_year'],
             ':end_month'    => $current || $data['end_year'] === null ? null : $data['end_month'],
             ':is_current'   => $current ? 1 : 0,
-            ':sort_order'   => $data['sort_order'],
             ':is_published' => $data['is_published'] ? 1 : 0,
         ];
     }

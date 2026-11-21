@@ -73,6 +73,31 @@ final class Request
         return is_string($value) ? trim($value) : '';
     }
 
+    /**
+     * Lista de enteros positivos del POST (p. ej. ids[]=3&ids[]=1).
+     * Si algún valor no es un entero positivo, devuelve [].
+     *
+     * @return list<int>
+     */
+    public function ints(string $key): array
+    {
+        $value = $this->input($key, []);
+
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $ints = [];
+        foreach ($value as $item) {
+            if (!is_string($item) || !ctype_digit($item) || (int) $item < 1) {
+                return [];
+            }
+            $ints[] = (int) $item;
+        }
+
+        return $ints;
+    }
+
     /** Parámetro de la query string (?clave=valor), recortado. */
     public function query(string $key): string
     {

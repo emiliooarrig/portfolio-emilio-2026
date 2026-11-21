@@ -12,7 +12,7 @@ use App\Models\StackCategory;
  */
 final class StackCategoryRequest
 {
-    /** @var array{name: string, icon: string, sort_order: int, is_published: bool} */
+    /** @var array{name: string, icon: string, is_published: bool} */
     private array $data;
     /** @var array<string, string> */
     private array $errors = [];
@@ -24,14 +24,12 @@ final class StackCategoryRequest
         $this->old = [
             'name'         => $request->string('name'),
             'icon'         => $request->string('icon'),
-            'sort_order'   => $request->string('sort_order'),
             'is_published' => $request->string('is_published') === '1' ? '1' : '0',
         ];
 
         $this->data = [
             'name'         => trim((string) preg_replace('/\s+/u', ' ', $this->old['name'])),
             'icon'         => $this->old['icon'],
-            'sort_order'   => is_numeric($this->old['sort_order']) ? (int) $this->old['sort_order'] : 0,
             'is_published' => $this->old['is_published'] === '1',
         ];
 
@@ -47,10 +45,6 @@ final class StackCategoryRequest
 
         if (!isset(StackCategory::ICONS[$d['icon']])) {
             $this->errors['icon'] = 'Elige un ícono de la lista.';
-        }
-
-        if (!is_numeric($this->old['sort_order'] === '' ? '0' : $this->old['sort_order']) || abs($d['sort_order']) > 100000) {
-            $this->errors['sort_order'] = 'Escribe un número entero.';
         }
     }
 
@@ -71,7 +65,7 @@ final class StackCategoryRequest
         return $this->old;
     }
 
-    /** @return array{name: string, icon: string, sort_order: int, is_published: bool} */
+    /** @return array{name: string, icon: string, is_published: bool} */
     public function validated(): array
     {
         return $this->data;

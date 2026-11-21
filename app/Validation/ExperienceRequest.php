@@ -11,9 +11,9 @@ use App\Core\Request;
  */
 final class ExperienceRequest
 {
-    private const FIELDS = ['company', 'role', 'summary', 'start_year', 'start_month', 'end_year', 'end_month', 'sort_order'];
+    private const FIELDS = ['company', 'role', 'summary', 'start_year', 'start_month', 'end_year', 'end_month'];
 
-    /** @var array{company: string, role: string, summary: string, start_year: ?int, start_month: ?int, end_year: ?int, end_month: ?int, is_current: bool, sort_order: int, is_published: bool} */
+    /** @var array{company: string, role: string, summary: string, start_year: ?int, start_month: ?int, end_year: ?int, end_month: ?int, is_current: bool, is_published: bool} */
     private array $data;
     /** @var array<string, string> */
     private array $errors = [];
@@ -39,7 +39,6 @@ final class ExperienceRequest
             'end_year'     => $int($this->old['end_year']),
             'end_month'    => $int($this->old['end_month']),
             'is_current'   => $this->old['is_current'] === '1',
-            'sort_order'   => is_numeric($this->old['sort_order']) ? (int) $this->old['sort_order'] : 0,
             'is_published' => $this->old['is_published'] === '1',
         ];
 
@@ -64,7 +63,7 @@ final class ExperienceRequest
     }
 
     /**
-     * @return array{company: string, role: string, summary: string, start_year: ?int, start_month: ?int, end_year: ?int, end_month: ?int, is_current: bool, sort_order: int, is_published: bool}
+     * @return array{company: string, role: string, summary: string, start_year: ?int, start_month: ?int, end_year: ?int, end_month: ?int, is_current: bool, is_published: bool}
      */
     public function validated(): array
     {
@@ -111,10 +110,6 @@ final class ExperienceRequest
             if ($end < $start) {
                 $this->errors['end_year'] = 'El fin no puede ser anterior al inicio.';
             }
-        }
-
-        if (!is_numeric($o['sort_order'] === '' ? '0' : $o['sort_order']) || abs($d['sort_order']) > 100000) {
-            $this->errors['sort_order'] = 'Escribe un número entero.';
         }
     }
 

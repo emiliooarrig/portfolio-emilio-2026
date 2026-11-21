@@ -99,6 +99,31 @@ function csrf_field(): string
 }
 
 /**
+ * Controles para reordenar un elemento de una lista [data-sort] del panel:
+ * el asa para arrastrar (solo con JS, admin.js) y los botones ↑/↓ (solo sin JS).
+ *
+ * @param array<string, int|string> $extra Campos ocultos extra (p. ej. category_id)
+ */
+function sort_controls(string $action, int $id, string $name, array $extra = [], bool $inline = false): string
+{
+    $hidden = '';
+    foreach ($extra as $key => $value) {
+        $hidden .= '<input type="hidden" name="' . e($key) . '" value="' . e((string) $value) . '">';
+    }
+
+    [$before, $after] = $inline ? ['antes', 'después'] : ['más arriba', 'más abajo'];
+    [$icBefore, $icAfter] = $inline ? ['arrow-left', 'arrow-right'] : ['arrow-up', 'arrow-down'];
+
+    return '<button type="button" class="drag" data-sort-handle data-requires-js aria-label="Mover ' . e($name) . '" aria-describedby="sort-help" title="Arrastra para ordenar">'
+        . icon('grip') . '</button>'
+        . '<form class="mv" method="post" action="' . e(url($action)) . '">'
+        . csrf_field() . '<input type="hidden" name="id" value="' . $id . '">' . $hidden
+        . '<button type="submit" name="dir" value="up" aria-label="Mover ' . e($name) . ' ' . $before . '">' . icon($icBefore) . '</button>'
+        . '<button type="submit" name="dir" value="down" aria-label="Mover ' . e($name) . ' ' . $after . '">' . icon($icAfter) . '</button>'
+        . '</form>';
+}
+
+/**
  * Ícono SVG de trazo (decorativo).
  */
 function icon(string $name, string $class = 'ic'): string
@@ -128,6 +153,8 @@ function icon(string $name, string $class = 'ic'): string
         'edit'           => '<path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/>',
         'search'         => '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
         'arrow-left'     => '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+        'arrow-down'     => '<path d="M12 5v14M6 13l6 6 6-6"/>',
+        'grip'           => '<path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01"/>',
         'reply'          => '<path d="M10 8L4 13l6 5M4 13h10a6 6 0 016 6"/>',
         'eye'            => '<path d="M2.5 12S6 5 12 5s9.5 7 9.5 7-3.5 7-9.5 7-9.5-7-9.5-7z"/><circle cx="12" cy="12" r="3"/>',
         'eye-off'        => '<path d="M10.6 5.1A9.8 9.8 0 0112 5c6 0 9.5 7 9.5 7a17 17 0 01-2.7 3.6M6.6 6.6A16.6 16.6 0 002.5 12S6 19 12 19a9.6 9.6 0 005.4-1.6M9.9 9.9a3 3 0 004.2 4.2M3 3l18 18"/>',

@@ -27,11 +27,6 @@ $attrs = static fn (string $field): string => isset($errors[$field])
             <input id="sc-name" class="inp" type="text" name="name" value="<?= e($values['name']) ?>" maxlength="80" required placeholder="Desarrollo, Datos, Seguridad…"<?= $attrs('name') ?>>
             <?= $err('name') ?>
         </div>
-        <div class="fld fld--year">
-            <label class="fl" for="sc-order">Orden</label>
-            <input id="sc-order" class="inp" type="text" name="sort_order" value="<?= e($values['sort_order']) ?>" inputmode="numeric" maxlength="6"<?= $attrs('sort_order') ?>>
-            <?= $err('sort_order') ?>
-        </div>
     </div>
 
     <fieldset class="fld">

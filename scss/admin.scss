@@ -901,6 +901,96 @@ select.inp { padding-right: 36px; }
     .ic { width: 13px; height: 13px; stroke-width: 2.4; }
 }
 
+// ─── Ordenar arrastrando (admin.js, listas [data-sort]) ──────
+.page-hint {
+    color: $muted;
+
+    .ic { width: 15px; height: 15px; vertical-align: -3px; stroke-width: 3.2; }
+}
+
+// Asa para arrastrar; solo existe con JS ([data-requires-js]).
+.drag {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 38px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: $muted;
+    cursor: grab;
+    touch-action: none;
+    transition: background .2s, color .2s;
+
+    &:hover { background: $ice; color: $cobalt-dark; }
+    &:focus-visible { outline: 2px solid $cobalt; outline-offset: 1px; color: $cobalt-dark; }
+
+    .ic { width: 18px; height: 18px; stroke-width: 3.4; }
+}
+
+// Sin JS: botones ↑/↓ que envían el formulario. Con JS los reemplaza el asa.
+.mv {
+    display: inline-flex;
+    gap: 2px;
+    margin: 0;
+
+    button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px; height: 28px;
+        padding: 0;
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        color: $muted;
+        cursor: pointer;
+
+        &:hover { background: $ice; color: $cobalt-dark; }
+        &:focus-visible { outline: 2px solid $cobalt; }
+    }
+
+    .ic { width: 15px; height: 15px; stroke-width: 2.2; }
+}
+
+.js .mv { display: none; }
+
+.tbl .drag-c { width: 1%; padding-right: 0; white-space: nowrap; }
+
+.stack-sort { display: flex; margin-left: -8px; }
+
+.tool {
+    .drag { width: 20px; height: 28px; margin-left: 4px; border-radius: 999px; .ic { width: 14px; height: 14px; } }
+    .mv { margin-left: 4px; button { width: 22px; height: 22px; } .ic { width: 12px; height: 12px; } }
+}
+
+.js .tool-n { padding-left: 2px; }
+
+// Mientras se arrastra: el elemento se "levanta" y sigue al puntero.
+.is-dragging {
+    position: relative;
+    z-index: 5;
+    will-change: transform;
+}
+
+tr.is-dragging {
+    box-shadow: 0 18px 36px -16px rgba($ink, .4);
+
+    td { background: $white; }
+}
+
+.stack-card.is-dragging { border-color: $cobalt; box-shadow: 0 30px 50px -24px rgba($ink, .45); }
+.tool.is-dragging { border-color: $cobalt; background: $white; box-shadow: 0 10px 22px -10px rgba($ink, .45); }
+
+.tbl tbody.is-sorting tr:not(.is-dragging):hover { background: transparent; }
+
+html.is-sorting,
+html.is-sorting * { cursor: grabbing !important; user-select: none; }
+
+[data-sort][aria-busy="true"] .drag { color: $cobalt; }
+
 .mq-dot {
     display: inline-block;
     width: 7px; height: 7px;

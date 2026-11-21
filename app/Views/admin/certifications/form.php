@@ -47,11 +47,6 @@ $attrs = static fn (string $field): string => isset($errors[$field])
             <datalist id="c-status-list"><option value="Vigente"><option value="En curso"><option value="Por concluir"><option value="Concluida"></datalist>
             <?= $err('status') ?>
         </div>
-        <div class="fld fld--year">
-            <label class="fl" for="c-order">Orden</label>
-            <input id="c-order" class="inp" type="text" name="sort_order" value="<?= e($values['sort_order']) ?>" inputmode="numeric" maxlength="6"<?= $attrs('sort_order') ?>>
-            <?= $err('sort_order') ?>
-        </div>
     </div>
 
     <div class="fld">

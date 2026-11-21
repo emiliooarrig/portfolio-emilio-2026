@@ -36,7 +36,7 @@ final class ExperienceController extends AdminController
         $this->form('Nueva experiencia', null, [
             'company' => '', 'role' => '', 'summary' => '',
             'start_year' => '', 'start_month' => '', 'end_year' => '', 'end_month' => '',
-            'is_current' => '1', 'sort_order' => (string) Experience::nextOrder(), 'is_published' => '1',
+            'is_current' => '1', 'is_published' => '1',
         ]);
     }
 
@@ -84,7 +84,6 @@ final class ExperienceController extends AdminController
             'end_year'     => $str($job['end_year']),
             'end_month'    => $str($job['end_month']),
             'is_current'   => (string) (int) $job['is_current'],
-            'sort_order'   => (string) $job['sort_order'],
             'is_published' => (string) (int) $job['is_published'],
         ]);
     }
@@ -125,6 +124,16 @@ final class ExperienceController extends AdminController
         $deleted = Experience::delete($request->id());
         $this->flash($deleted ? 'ok' : 'error', $deleted ? 'Experiencia eliminada.' : 'La experiencia ya no existe.');
         Response::redirect(url('/admin/experiencia'));
+    }
+
+    /** POST /admin/experiencia/orden */
+    public function order(Request $request): void
+    {
+        if (!$this->guard($request)) {
+            return;
+        }
+
+        $this->reorder($request, 'experiences', url('/admin/experiencia'));
     }
 
     /**

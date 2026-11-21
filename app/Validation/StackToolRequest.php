@@ -14,7 +14,7 @@ use App\Models\StackTool;
  */
 final class StackToolRequest
 {
-    /** @var array{category_id: int, name: string, in_marquee: bool, sort_order: int, is_published: bool} */
+    /** @var array{category_id: int, name: string, in_marquee: bool, is_published: bool} */
     private array $data;
     /** @var array<string, string> */
     private array $errors = [];
@@ -27,22 +27,16 @@ final class StackToolRequest
             'category_id'  => $request->string('category_id'),
             'name'         => $request->string('name'),
             'in_marquee'   => $request->string('in_marquee') === '1' ? '1' : '0',
-            'sort_order'   => $request->string('sort_order'),
             'is_published' => $quick || $request->string('is_published') === '1' ? '1' : '0',
         ];
 
         $categoryId = ctype_digit($this->old['category_id']) ? (int) $this->old['category_id'] : 0;
         $categoryOk = $categoryId > 0 && StackCategory::find($categoryId) !== null;
 
-        if ($quick && $categoryOk) {
-            $this->old['sort_order'] = (string) StackTool::nextOrder($categoryId);
-        }
-
         $this->data = [
             'category_id'  => $categoryId,
             'name'         => trim((string) preg_replace('/\s+/u', ' ', $this->old['name'])),
             'in_marquee'   => $this->old['in_marquee'] === '1',
-            'sort_order'   => is_numeric($this->old['sort_order']) ? (int) $this->old['sort_order'] : 0,
             'is_published' => $this->old['is_published'] === '1',
         ];
 
@@ -58,10 +52,6 @@ final class StackToolRequest
             $this->errors['name'] = 'Máximo 60 caracteres.';
         } elseif ($categoryOk && StackTool::exists($categoryId, $d['name'], $exceptId)) {
             $this->errors['name'] = '«' . $d['name'] . '» ya está en esa categoría.';
-        }
-
-        if (!is_numeric($this->old['sort_order'] === '' ? '0' : $this->old['sort_order']) || abs($d['sort_order']) > 100000) {
-            $this->errors['sort_order'] = 'Escribe un número entero.';
         }
     }
 
@@ -88,7 +78,7 @@ final class StackToolRequest
         return $this->old;
     }
 
-    /** @return array{category_id: int, name: string, in_marquee: bool, sort_order: int, is_published: bool} */
+    /** @return array{category_id: int, name: string, in_marquee: bool, is_published: bool} */
     public function validated(): array
     {
         return $this->data;

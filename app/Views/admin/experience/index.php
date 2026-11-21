@@ -3,7 +3,7 @@
 use App\Models\Experience;
 ?>
 <div class="page-a">
-    <p class="page-p">Se muestra en la sección <b>Experiencia</b> del sitio, en el orden de la columna “Orden”.</p>
+    <p class="page-p">Se muestra en la sección <b>Experiencia</b> del sitio en este mismo orden. <span class="page-hint" data-requires-js>Arrastra desde <?= icon('grip') ?> para cambiar el orden; se guarda solo.</span></p>
     <a class="adm-btn" href="<?= e(url('/admin/experiencia/nueva')) ?>"><?= icon('plus') ?><span>Nueva experiencia</span></a>
 </div>
 
@@ -18,18 +18,18 @@ use App\Models\Experience;
             <table class="tbl">
                 <thead>
                     <tr>
-                        <th scope="col" class="num">Orden</th>
+                        <th scope="col" class="drag-c"><span class="sr-only">Orden</span></th>
                         <th scope="col">Empresa y puesto</th>
                         <th scope="col">Periodo</th>
                         <th scope="col">Visible</th>
                         <th scope="col"><span class="sr-only">Acciones</span></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody data-sort="<?= e(url('/admin/experiencia/orden')) ?>" data-sort-axis="y">
                     <?php foreach ($experience as $job): ?>
                         <?php $period = Experience::period($job); ?>
-                        <tr>
-                            <td class="num ff-m"><?= (int) $job['sort_order'] ?></td>
+                        <tr data-sort-id="<?= (int) $job['id'] ?>" data-sort-name="<?= e((string) $job['company']) ?>">
+                            <td class="drag-c"><?= sort_controls('/admin/experiencia/orden', (int) $job['id'], (string) $job['company']) ?></td>
                             <td>
                                 <div class="cert-cell">
                                     <span class="cert-ic"><?= icon('briefcase') ?></span>

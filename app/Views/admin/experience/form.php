@@ -77,13 +77,6 @@ $monthSelect = static function (string $name, string $label) use ($values, $mont
         </div>
     </fieldset>
 
-    <div class="fld fld--year">
-        <label class="fl" for="x-order">Orden</label>
-        <input id="x-order" class="inp" type="text" name="sort_order" value="<?= e($values['sort_order']) ?>" inputmode="numeric" maxlength="6"<?= $attrs('sort_order') ?>>
-        <p class="f-hint">Menor = más arriba.</p>
-        <?= $err('sort_order') ?>
-    </div>
-
     <label class="check">
         <input type="checkbox" name="is_published" value="1"<?= $values['is_published'] === '1' ? ' checked' : '' ?>>
         <span>Publicada <small>Si la desmarcas, se guarda pero no aparece en el sitio.</small></span>

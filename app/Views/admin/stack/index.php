@@ -3,7 +3,7 @@
 /** @var array<string, string> $icons */
 ?>
 <div class="page-a">
-    <p class="page-p">Se muestra en la sección <b>Stack</b> del sitio. Las herramientas con <span class="mq-dot" aria-hidden="true"></span> también salen en la cinta animada.</p>
+    <p class="page-p">Se muestra en la sección <b>Stack</b> del sitio. Las herramientas con <span class="mq-dot" aria-hidden="true"></span> también salen en la cinta animada. <span class="page-hint" data-requires-js>Arrastra desde <?= icon('grip') ?> para ordenar categorías y herramientas.</span></p>
     <div class="page-btns">
         <?php if ($categories !== []): ?>
             <a class="adm-btn adm-btn--ghost" href="<?= e(url('/admin/stack/herramientas/nueva')) ?>"><?= icon('plus') ?><span>Herramienta</span></a>
@@ -18,20 +18,21 @@
         <p class="side-p">Para cargar el stack inicial ejecuta <code>composer db:seed</code>, o crea la primera categoría.</p>
     </section>
 <?php else: ?>
-    <div class="stack-grid">
+    <div class="stack-grid" data-sort="<?= e(url('/admin/stack/categorias/orden')) ?>">
         <?php foreach ($categories as $cat): ?>
             <?php
             $catId = (int) $cat['id'];
             $tools = $cat['tools'];
             $count = count($tools);
             ?>
-            <section class="adm-card stack-card<?= (int) $cat['is_published'] === 1 ? '' : ' is-hidden' ?>" id="cat-<?= $catId ?>" aria-labelledby="cat-h-<?= $catId ?>">
+            <section class="adm-card stack-card<?= (int) $cat['is_published'] === 1 ? '' : ' is-hidden' ?>" id="cat-<?= $catId ?>" aria-labelledby="cat-h-<?= $catId ?>" data-sort-id="<?= $catId ?>" data-sort-name="<?= e((string) $cat['name']) ?>">
                 <header class="stack-h">
+                    <div class="stack-sort"><?= sort_controls('/admin/stack/categorias/orden', $catId, 'la categoría ' . (string) $cat['name']) ?></div>
                     <span class="cert-ic"><?= icon((string) $cat['icon']) ?></span>
                     <div class="stack-ht">
                         <h2 class="card-t" id="cat-h-<?= $catId ?>"><?= e((string) $cat['name']) ?></h2>
                         <span class="card-s">
-                            Orden <?= (int) $cat['sort_order'] ?> · <?= $count ?> <?= $count === 1 ? 'herramienta' : 'herramientas' ?>
+                            <?= $count ?> <?= $count === 1 ? 'herramienta' : 'herramientas' ?>
                             <?php if ((int) $cat['is_published'] !== 1): ?> · <span class="chip chip--archivado">Oculta</span><?php endif; ?>
                         </span>
                     </div>
@@ -51,10 +52,11 @@
                 <?php if ($tools === []): ?>
                     <p class="side-p">Sin herramientas. Agrega la primera abajo.</p>
                 <?php else: ?>
-                    <ul class="tool-list">
+                    <ul class="tool-list" data-sort="<?= e(url('/admin/stack/herramientas/orden')) ?>" data-sort-params="category_id=<?= $catId ?>">
                         <?php foreach ($tools as $tool): ?>
                             <?php $hidden = (int) $tool['is_published'] !== 1; ?>
-                            <li class="tool<?= $hidden ? ' is-hidden' : '' ?>">
+                            <li class="tool<?= $hidden ? ' is-hidden' : '' ?>" data-sort-id="<?= (int) $tool['id'] ?>" data-sort-name="<?= e((string) $tool['name']) ?>">
+                                <?= sort_controls('/admin/stack/herramientas/orden', (int) $tool['id'], (string) $tool['name'], ['category_id' => $catId], true) ?>
                                 <a class="tool-n" href="<?= e(url('/admin/stack/herramientas/editar?id=' . (int) $tool['id'])) ?>" title="Editar">
                                     <?php if ((int) $tool['in_marquee'] === 1): ?><span class="mq-dot" title="En la cinta animada"></span><?php endif; ?>
                                     <?= e((string) $tool['name']) ?>

@@ -3,7 +3,7 @@
 /** @var array<string, string> $icons */
 ?>
 <div class="page-a">
-    <p class="page-p">Se muestran en la sección <b>Certificaciones</b> del sitio, en el orden de la columna “Orden”.</p>
+    <p class="page-p">Se muestran en la sección <b>Certificaciones</b> del sitio en este mismo orden. <span class="page-hint" data-requires-js>Arrastra desde <?= icon('grip') ?> para cambiar el orden; se guarda solo.</span></p>
     <a class="adm-btn" href="<?= e(url('/admin/certificaciones/nueva')) ?>"><?= icon('plus') ?><span>Nueva certificación</span></a>
 </div>
 
@@ -18,17 +18,17 @@
             <table class="tbl">
                 <thead>
                     <tr>
-                        <th scope="col" class="num">Orden</th>
+                        <th scope="col" class="drag-c"><span class="sr-only">Orden</span></th>
                         <th scope="col">Certificación</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Visible</th>
                         <th scope="col"><span class="sr-only">Acciones</span></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody data-sort="<?= e(url('/admin/certificaciones/orden')) ?>" data-sort-axis="y">
                     <?php foreach ($certifications as $c): ?>
-                        <tr>
-                            <td class="num ff-m"><?= (int) $c['sort_order'] ?></td>
+                        <tr data-sort-id="<?= (int) $c['id'] ?>" data-sort-name="<?= e((string) $c['title']) ?>">
+                            <td class="drag-c"><?= sort_controls('/admin/certificaciones/orden', (int) $c['id'], (string) $c['title']) ?></td>
                             <td>
                                 <div class="cert-cell">
                                     <span class="cert-ic"><?= icon((string) $c['icon']) ?></span>

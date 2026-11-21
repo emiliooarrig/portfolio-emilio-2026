@@ -27,11 +27,6 @@ $attrs = static fn (string $field): string => isset($errors[$field])
             <input id="st-name" class="inp" type="text" name="name" value="<?= e($values['name']) ?>" maxlength="60" required placeholder="React, Docker, MySQL…"<?= $attrs('name') ?>>
             <?= $err('name') ?>
         </div>
-        <div class="fld fld--year">
-            <label class="fl" for="st-order">Orden</label>
-            <input id="st-order" class="inp" type="text" name="sort_order" value="<?= e($values['sort_order']) ?>" inputmode="numeric" maxlength="6"<?= $attrs('sort_order') ?>>
-            <?= $err('sort_order') ?>
-        </div>
     </div>
 
     <div class="fld">

@@ -80,7 +80,7 @@ final class Certification
     }
 
     /**
-     * @param array{title: string, issuer: string, year: ?int, status: string, url: string, icon: string, sort_order: int, is_published: bool} $data
+     * @param array{title: string, issuer: string, year: ?int, status: string, url: string, icon: string, sort_order?: int, is_published: bool} $data
      */
     public static function create(array $data): int
     {
@@ -88,20 +88,20 @@ final class Certification
         $pdo->prepare(
             'INSERT INTO certifications (title, issuer, year, status, url, icon, sort_order, is_published)
              VALUES (:title, :issuer, :year, :status, :url, :icon, :sort_order, :is_published)'
-        )->execute(self::params($data));
+        )->execute(self::params($data) + [':sort_order' => $data['sort_order'] ?? self::nextOrder()]);
 
         return (int) $pdo->lastInsertId();
     }
 
     /**
-     * @param array{title: string, issuer: string, year: ?int, status: string, url: string, icon: string, sort_order: int, is_published: bool} $data
+     * @param array{title: string, issuer: string, year: ?int, status: string, url: string, icon: string, sort_order?: int, is_published: bool} $data
      */
     public static function update(int $id, array $data): void
     {
         Database::connection()->prepare(
             'UPDATE certifications
              SET title = :title, issuer = :issuer, year = :year, status = :status, url = :url,
-                 icon = :icon, sort_order = :sort_order, is_published = :is_published
+                 icon = :icon, is_published = :is_published
              WHERE id = :id'
         )->execute(self::params($data) + [':id' => $id]);
     }
@@ -116,7 +116,7 @@ final class Certification
 
     public static function nextOrder(): int
     {
-        return (int) Database::connection()->query('SELECT COALESCE(MAX(sort_order), 0) + 10 FROM certifications')->fetchColumn();
+        return Ordering::next('certifications');
     }
 
     /**
@@ -154,7 +154,7 @@ final class Certification
     }
 
     /**
-     * @param array{title: string, issuer: string, year: ?int, status: string, url: string, icon: string, sort_order: int, is_published: bool} $data
+     * @param array{title: string, issuer: string, year: ?int, status: string, url: string, icon: string, sort_order?: int, is_published: bool} $data
      * @return array<string, mixed>
      */
     private static function params(array $data): array
@@ -166,7 +166,6 @@ final class Certification
             ':status'       => $data['status'],
             ':url'          => $data['url'],
             ':icon'         => $data['icon'],
-            ':sort_order'   => $data['sort_order'],
             ':is_published' => $data['is_published'] ? 1 : 0,
         ];
     }

@@ -34,6 +34,7 @@ return static function (Router $router): void {
     $router->get('/admin/certificaciones/editar', [CertificationController::class, 'edit']);
     $router->post('/admin/certificaciones/editar', [CertificationController::class, 'update']);
     $router->post('/admin/certificaciones/eliminar', [CertificationController::class, 'destroy']);
+    $router->post('/admin/certificaciones/orden', [CertificationController::class, 'order']);
 
     $router->get('/admin/stack', [StackController::class, 'index']);
     $router->get('/admin/stack/categorias/nueva', [StackController::class, 'createCategory']);
@@ -41,11 +42,13 @@ return static function (Router $router): void {
     $router->get('/admin/stack/categorias/editar', [StackController::class, 'editCategory']);
     $router->post('/admin/stack/categorias/editar', [StackController::class, 'updateCategory']);
     $router->post('/admin/stack/categorias/eliminar', [StackController::class, 'destroyCategory']);
+    $router->post('/admin/stack/categorias/orden', [StackController::class, 'orderCategories']);
     $router->get('/admin/stack/herramientas/nueva', [StackController::class, 'createTool']);
     $router->post('/admin/stack/herramientas/nueva', [StackController::class, 'storeTool']);
     $router->get('/admin/stack/herramientas/editar', [StackController::class, 'editTool']);
     $router->post('/admin/stack/herramientas/editar', [StackController::class, 'updateTool']);
     $router->post('/admin/stack/herramientas/eliminar', [StackController::class, 'destroyTool']);
+    $router->post('/admin/stack/herramientas/orden', [StackController::class, 'orderTools']);
 
     $router->get('/admin/experiencia', [ExperienceController::class, 'index']);
     $router->get('/admin/experiencia/nueva', [ExperienceController::class, 'create']);
@@ -53,4 +56,5 @@ return static function (Router $router): void {
     $router->get('/admin/experiencia/editar', [ExperienceController::class, 'edit']);
     $router->post('/admin/experiencia/editar', [ExperienceController::class, 'update']);
     $router->post('/admin/experiencia/eliminar', [ExperienceController::class, 'destroy']);
+    $router->post('/admin/experiencia/orden', [ExperienceController::class, 'order']);
 };

@@ -126,25 +126,27 @@ final class StackCategory
     }
 
     /**
-     * @param array{name: string, icon: string, sort_order: int, is_published: bool} $data
+     * Se agrega al final de la lista.
+     *
+     * @param array{name: string, icon: string, is_published: bool} $data
      */
     public static function create(array $data): int
     {
         $pdo = Database::connection();
         $pdo->prepare('INSERT INTO stack_categories (name, icon, sort_order, is_published) VALUES (?, ?, ?, ?)')
-            ->execute([$data['name'], $data['icon'], $data['sort_order'], $data['is_published'] ? 1 : 0]);
+            ->execute([$data['name'], $data['icon'], self::nextOrder(), $data['is_published'] ? 1 : 0]);
 
         return (int) $pdo->lastInsertId();
     }
 
     /**
-     * @param array{name: string, icon: string, sort_order: int, is_published: bool} $data
+     * @param array{name: string, icon: string, is_published: bool} $data
      */
     public static function update(int $id, array $data): void
     {
         Database::connection()
-            ->prepare('UPDATE stack_categories SET name = ?, icon = ?, sort_order = ?, is_published = ? WHERE id = ?')
-            ->execute([$data['name'], $data['icon'], $data['sort_order'], $data['is_published'] ? 1 : 0, $id]);
+            ->prepare('UPDATE stack_categories SET name = ?, icon = ?, is_published = ? WHERE id = ?')
+            ->execute([$data['name'], $data['icon'], $data['is_published'] ? 1 : 0, $id]);
     }
 
     /** Borra la categoría y, por la llave foránea, todas sus herramientas. */
@@ -158,6 +160,6 @@ final class StackCategory
 
     public static function nextOrder(): int
     {
-        return (int) Database::connection()->query('SELECT COALESCE(MAX(sort_order), 0) + 10 FROM stack_categories')->fetchColumn();
+        return Ordering::next('stack_categories');
     }
 }

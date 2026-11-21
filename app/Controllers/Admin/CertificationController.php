@@ -36,7 +36,7 @@ final class CertificationController extends AdminController
 
         $this->form('Nueva certificación', null, [
             'title' => '', 'issuer' => '', 'year' => '', 'status' => 'Vigente', 'url' => '',
-            'icon' => 'award', 'sort_order' => (string) Certification::nextOrder(), 'is_published' => '1',
+            'icon' => 'award', 'is_published' => '1',
         ]);
     }
 
@@ -80,7 +80,6 @@ final class CertificationController extends AdminController
             'status'       => (string) $cert['status'],
             'url'          => (string) $cert['url'],
             'icon'         => (string) $cert['icon'],
-            'sort_order'   => (string) $cert['sort_order'],
             'is_published' => (string) (int) $cert['is_published'],
         ]);
     }
@@ -121,6 +120,16 @@ final class CertificationController extends AdminController
         $deleted = Certification::delete($request->id());
         $this->flash($deleted ? 'ok' : 'error', $deleted ? 'Certificación eliminada.' : 'La certificación ya no existe.');
         Response::redirect(url('/admin/certificaciones'));
+    }
+
+    /** POST /admin/certificaciones/orden */
+    public function order(Request $request): void
+    {
+        if (!$this->guard($request)) {
+            return;
+        }
+
+        $this->reorder($request, 'certifications', url('/admin/certificaciones'));
     }
 
     /**

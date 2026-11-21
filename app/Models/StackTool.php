@@ -75,25 +75,31 @@ final class StackTool
     }
 
     /**
-     * @param array{category_id: int, name: string, in_marquee: bool, sort_order: int, is_published: bool} $data
+     * Se agrega al final de su categoría.
+     *
+     * @param array{category_id: int, name: string, in_marquee: bool, is_published: bool} $data
      */
     public static function create(array $data): int
     {
         $pdo = Database::connection();
         $pdo->prepare('INSERT INTO stack_tools (category_id, name, in_marquee, sort_order, is_published) VALUES (?, ?, ?, ?, ?)')
-            ->execute([$data['category_id'], $data['name'], $data['in_marquee'] ? 1 : 0, $data['sort_order'], $data['is_published'] ? 1 : 0]);
+            ->execute([$data['category_id'], $data['name'], $data['in_marquee'] ? 1 : 0, self::nextOrder($data['category_id']), $data['is_published'] ? 1 : 0]);
 
         return (int) $pdo->lastInsertId();
     }
 
     /**
-     * @param array{category_id: int, name: string, in_marquee: bool, sort_order: int, is_published: bool} $data
+     * @param array{category_id: int, name: string, in_marquee: bool, is_published: bool} $data
      */
     public static function update(int $id, array $data): void
     {
-        Database::connection()
-            ->prepare('UPDATE stack_tools SET category_id = ?, name = ?, in_marquee = ?, sort_order = ?, is_published = ? WHERE id = ?')
-            ->execute([$data['category_id'], $data['name'], $data['in_marquee'] ? 1 : 0, $data['sort_order'], $data['is_published'] ? 1 : 0, $id]);
+        $pdo = Database::connection();
+        $pdo->prepare('UPDATE stack_tools SET name = ?, in_marquee = ?, is_published = ? WHERE id = ?')
+            ->execute([$data['name'], $data['in_marquee'] ? 1 : 0, $data['is_published'] ? 1 : 0, $id]);
+
+        // Si cambia de categoría, entra al final de la nueva.
+        $pdo->prepare('UPDATE stack_tools SET category_id = ?, sort_order = ? WHERE id = ? AND category_id <> ?')
+            ->execute([$data['category_id'], self::nextOrder($data['category_id']), $id, $data['category_id']]);
     }
 
     public static function delete(int $id): bool
@@ -106,9 +112,6 @@ final class StackTool
 
     public static function nextOrder(int $categoryId): int
     {
-        $stmt = Database::connection()->prepare('SELECT COALESCE(MAX(sort_order), 0) + 10 FROM stack_tools WHERE category_id = ?');
-        $stmt->execute([$categoryId]);
-
-        return (int) $stmt->fetchColumn();
+        return Ordering::next('stack_tools', 'category_id', $categoryId);
     }
 }

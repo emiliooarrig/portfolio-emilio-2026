@@ -39,7 +39,7 @@ final class StackController extends AdminController
         }
 
         $this->categoryForm('Nueva categoría', null, [
-            'name' => '', 'icon' => 'code', 'sort_order' => (string) StackCategory::nextOrder(), 'is_published' => '1',
+            'name' => '', 'icon' => 'code', 'is_published' => '1',
         ]);
     }
 
@@ -80,7 +80,6 @@ final class StackController extends AdminController
         $this->categoryForm('Editar categoría', (int) $category['id'], [
             'name'         => (string) $category['name'],
             'icon'         => (string) $category['icon'],
-            'sort_order'   => (string) $category['sort_order'],
             'is_published' => (string) (int) $category['is_published'],
         ]);
     }
@@ -123,7 +122,35 @@ final class StackController extends AdminController
         Response::redirect(url('/admin/stack'));
     }
 
+    /** POST /admin/stack/categorias/orden */
+    public function orderCategories(Request $request): void
+    {
+        if (!$this->guard($request)) {
+            return;
+        }
+
+        $this->reorder($request, 'stack_categories', url('/admin/stack') . '#cat-' . $request->id());
+    }
+
     // ─── Herramientas ────────────────────────────────────────
+
+    /** POST /admin/stack/herramientas/orden — dentro de una categoría (category_id). */
+    public function orderTools(Request $request): void
+    {
+        if (!$this->guard($request)) {
+            return;
+        }
+
+        $categoryId = $request->id('category_id');
+
+        if (StackCategory::find($categoryId) === null) {
+            $this->flash('error', 'La categoría ya no existe.');
+            Response::redirect(url('/admin/stack'));
+            return;
+        }
+
+        $this->reorder($request, 'stack_tools', url('/admin/stack') . '#cat-' . $categoryId, 'category_id', $categoryId);
+    }
 
     /** GET /admin/stack/herramientas/nueva?categoria= */
     public function createTool(Request $request): void
@@ -138,7 +165,6 @@ final class StackController extends AdminController
             'category_id'  => $categoryId > 0 ? (string) $categoryId : '',
             'name'         => '',
             'in_marquee'   => '0',
-            'sort_order'   => $categoryId > 0 ? (string) StackTool::nextOrder($categoryId) : '10',
             'is_published' => '1',
         ]);
     }
@@ -190,7 +216,6 @@ final class StackController extends AdminController
             'category_id'  => (string) $tool['category_id'],
             'name'         => (string) $tool['name'],
             'in_marquee'   => (string) (int) $tool['in_marquee'],
-            'sort_order'   => (string) $tool['sort_order'],
             'is_published' => (string) (int) $tool['is_published'],
         ]);
     }

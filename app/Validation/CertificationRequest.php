@@ -12,7 +12,7 @@ use App\Models\Certification;
  */
 final class CertificationRequest
 {
-    /** @var array{title: string, issuer: string, year: ?int, status: string, url: string, icon: string, sort_order: int, is_published: bool} */
+    /** @var array{title: string, issuer: string, year: ?int, status: string, url: string, icon: string, is_published: bool} */
     private array $data;
     /** @var array<string, string> */
     private array $errors = [];
@@ -28,7 +28,6 @@ final class CertificationRequest
             'status'       => $request->string('status'),
             'url'          => $request->string('url'),
             'icon'         => $request->string('icon'),
-            'sort_order'   => $request->string('sort_order'),
             'is_published' => $request->string('is_published') === '1' ? '1' : '0',
         ];
 
@@ -39,7 +38,6 @@ final class CertificationRequest
             'status'       => self::clean($this->old['status']),
             'url'          => $this->old['url'],
             'icon'         => $this->old['icon'],
-            'sort_order'   => is_numeric($this->old['sort_order']) ? (int) $this->old['sort_order'] : 0,
             'is_published' => $this->old['is_published'] === '1',
         ];
 
@@ -64,7 +62,7 @@ final class CertificationRequest
     }
 
     /**
-     * @return array{title: string, issuer: string, year: ?int, status: string, url: string, icon: string, sort_order: int, is_published: bool}
+     * @return array{title: string, issuer: string, year: ?int, status: string, url: string, icon: string, is_published: bool}
      */
     public function validated(): array
     {
@@ -103,10 +101,6 @@ final class CertificationRequest
 
         if (!isset(Certification::ICONS[$d['icon']])) {
             $this->errors['icon'] = 'Elige un ícono de la lista.';
-        }
-
-        if (!is_numeric($this->old['sort_order'] === '' ? '0' : $this->old['sort_order']) || abs($d['sort_order']) > 100000) {
-            $this->errors['sort_order'] = 'Escribe un número entero.';
         }
     }
 
