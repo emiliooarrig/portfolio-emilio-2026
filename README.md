@@ -69,9 +69,10 @@ Entra en `/admin/login`. El panel tiene:
 
 - **Dashboard**: mensajes sin leer, de los últimos 7 días y totales; mensajes por día (últimos 14 días) y por tema; los 5 más recientes.
 - **Mensajes**: búsqueda por nombre, correo o texto; filtros por estado y tema; detalle con "Responder por correo". Al abrir un mensaje nuevo queda como *Leído*; también se puede marcar como *Respondido* o *Archivado*, o eliminar.
-- **Stack**: categorías (nombre, ícono, orden, publicada) y sus herramientas (nombre, orden, publicada y si aparece en la cinta animada). Cada categoría es una tarjeta con un campo para agregar herramientas rápido; clic en una herramienta para editarla o moverla de categoría. Al borrar una categoría se borran sus herramientas.
-- **Experiencia**: empresa, puesto, descripción y periodo (mes opcional, año, o "trabajo aquí actualmente"); orden, publicar u ocultar y eliminar. En el sitio el periodo se ve como "mar 2021 — ago 2023", "2023 — hoy" o "Actual".
-- **Certificaciones**: alta, edición, orden, publicar u ocultar y eliminar. El sitio muestra solo las publicadas, ordenadas por la columna *Orden*.
+- **Stack**: categorías (nombre, ícono, publicada) y sus herramientas (nombre, publicada y si aparece en la cinta animada). Cada categoría es una tarjeta con un campo para agregar herramientas rápido; clic en una herramienta para editarla o moverla de categoría (entra al final de la nueva). Al borrar una categoría se borran sus herramientas.
+- **Experiencia**: empresa, puesto, descripción y periodo (mes opcional, año, o "trabajo aquí actualmente"); publicar u ocultar y eliminar. En el sitio el periodo se ve como "mar 2021 — ago 2023", "2023 — hoy" o "Actual".
+- **Certificaciones**: alta, edición, publicar u ocultar y eliminar. El sitio muestra solo las publicadas, en el orden de la lista.
+- **Orden**: experiencia, certificaciones, categorías del stack y herramientas (dentro de su categoría) se ordenan arrastrando desde el asa ⠿, con mouse o con el dedo. Con el asa enfocada también se mueven con las flechas o con Inicio y Fin, y Esc cancela un arrastre. El orden se guarda solo (`POST …/orden`); si el servidor lo rechaza porque la lista cambió en otra pestaña, la lista regresa al último orden guardado. Sin JS aparecen botones ↑/↓. Lo nuevo entra al final de la lista. La lógica está en `App\Models\Ordering` y el arrastre en `admin.js`.
 
 Transiciones del login:
 
