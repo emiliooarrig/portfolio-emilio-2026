@@ -1,4 +1,6 @@
-.mani { padding: 128px 0; overflow: hidden; }
+// position: relative contiene a .mani-grid (absolute); sin él la cuadrícula
+// se posiciona contra la ventana y queda encima del hero.
+.mani { position: relative; padding: 128px 0; overflow: hidden; }
 
 .mani-grid {
     position: absolute;

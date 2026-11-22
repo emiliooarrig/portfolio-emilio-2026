@@ -6,9 +6,11 @@
 //   .is-cta    CTA: se llena y muestra una palabra (data-cursor="Abrir")
 //   .is-text   campos de texto: se oculta y queda el cursor nativo
 //   .is-light  sobre fondos oscuros, cobalto o Fovea
+//   .is-hero   sobre el círculo cobalto y la terminal del hero
 // ─────────────────────────────────────────────────────────────
 
 $cur-size:      36px;
+$cur-hero:      #FFB547; // ámbar: contrasta con cobalto, navy y el texto de la terminal
 $cur-size-link: 60px;
 $cur-size-cta:  92px;
 $cur-dot:       6px;
@@ -40,6 +42,13 @@ $cur-dot:       6px;
         --cur-tint: #{rgba($white, .14)};
         --cur-fill: #{$white};
         --cur-ink: #{$ink};
+    }
+
+    &.is-hero {
+        --cur-c: #{$cur-hero};
+        --cur-tint: #{rgba($cur-hero, .16)};
+        --cur-fill: #{$cur-hero};
+        --cur-ink: #{$navy};
     }
 
     .is-fovea &.is-light {

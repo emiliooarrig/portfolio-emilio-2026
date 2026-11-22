@@ -463,6 +463,7 @@
     const LIGHT = '.dark, .cobalt, .foot';
     const FOVEA = '.fov, .fov-near';
     const SOLID = '.pc, .tabs, .form, .ok'; // superficies blancas dentro de zonas oscuras
+    const HERO = '.hv .orb, .hv .term'; // círculo cobalto y terminal del hero
 
     const labelFor = (el) => {
       const tagged = el.closest('[data-cursor]');
@@ -500,6 +501,7 @@
       cur.classList.toggle('is-cta', !!word);
       cur.classList.toggle('is-link', link);
       cur.classList.toggle('is-light', light);
+      cur.classList.toggle('is-hero', !!el.closest(HERO));
       if (word && label.textContent !== word) label.textContent = word;
     };
 

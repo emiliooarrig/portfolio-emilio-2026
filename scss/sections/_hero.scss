@@ -112,6 +112,7 @@
 .sat {
     position: absolute;
     inset: 0;
+    pointer-events: none; // cubre todo el visual: deja que el puntero alcance .orb y .term
     animation: spin 16s linear infinite;
 
     &::before {
