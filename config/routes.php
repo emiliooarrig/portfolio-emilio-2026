@@ -7,14 +7,17 @@ use App\Controllers\Admin\CertificationController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\ExperienceController;
 use App\Controllers\Admin\MessageController;
+use App\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Controllers\Admin\StackController;
 use App\Controllers\ContactController;
 use App\Controllers\HomeController;
+use App\Controllers\ProjectController;
 use App\Core\Router;
 
 return static function (Router $router): void {
     $router->get('/', [HomeController::class, 'index']);
     $router->post('/contacto', [ContactController::class, 'store']);
+    $router->get('/proyectos/{slug}', [ProjectController::class, 'show']);
 
     // ─── Panel de administración ────────────────────────────
     $router->get('/admin/login', [AuthController::class, 'show']);
@@ -57,4 +60,12 @@ return static function (Router $router): void {
     $router->post('/admin/experiencia/editar', [ExperienceController::class, 'update']);
     $router->post('/admin/experiencia/eliminar', [ExperienceController::class, 'destroy']);
     $router->post('/admin/experiencia/orden', [ExperienceController::class, 'order']);
+
+    $router->get('/admin/proyectos', [AdminProjectController::class, 'index']);
+    $router->get('/admin/proyectos/nueva', [AdminProjectController::class, 'create']);
+    $router->post('/admin/proyectos/nueva', [AdminProjectController::class, 'store']);
+    $router->get('/admin/proyectos/editar', [AdminProjectController::class, 'edit']);
+    $router->post('/admin/proyectos/editar', [AdminProjectController::class, 'update']);
+    $router->post('/admin/proyectos/eliminar', [AdminProjectController::class, 'destroy']);
+    $router->post('/admin/proyectos/orden', [AdminProjectController::class, 'order']);
 };

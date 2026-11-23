@@ -8,6 +8,7 @@ declare(strict_types=1);
  |   composer admin:password    cambia la contraseña de un administrador
  |   composer certs:import      carga data/certifications.json en la tabla certifications
  |   composer experience:import carga data/experience.json en la tabla experiences
+ |   composer projects:import   carga data/projects.json en la tabla projects
  |   composer db:migrate        crea las tablas que falten (database/schema.sql) con la conexión del .env
  |   composer db:seed           carga database/seeds/*.sql en las tablas que estén vacías
  */
@@ -17,6 +18,7 @@ use App\Core\Database;
 use App\Models\Admin;
 use App\Models\Certification;
 use App\Models\Experience;
+use App\Models\Project;
 
 $root = dirname(__DIR__);
 require $root . '/vendor/autoload.php';
@@ -83,7 +85,7 @@ $sqlStatements = static function (string $file): array {
     ));
 };
 
-$commands = ['admin:create', 'admin:password', 'certs:import', 'experience:import', 'db:migrate', 'db:seed'];
+$commands = ['admin:create', 'admin:password', 'certs:import', 'experience:import', 'projects:import', 'db:migrate', 'db:seed'];
 
 if (!in_array($command, $commands, true)) {
     $out('Uso: php bin/console.php [' . implode(' | ', $commands) . ']');
@@ -203,6 +205,19 @@ switch ($command) {
         }
 
         $out('✓ ' . count($items) . ' experiencias importadas desde data/experience.json.');
+        break;
+
+    case 'projects:import':
+        if (Project::count() > 0) {
+            $fail('La tabla projects ya tiene datos; no se importó nada para no duplicar.');
+        }
+
+        $items = Project::fromJson();
+        foreach ($items as $p) {
+            Project::create(array_diff_key($p, array_flip(['id', 'updated_at'])) + ['repo_url' => '']);
+        }
+
+        $out('✓ ' . count($items) . ' proyectos importados desde data/projects.json.');
         break;
 
     case 'certs:import':

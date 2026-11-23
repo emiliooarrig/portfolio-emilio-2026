@@ -676,6 +676,31 @@ select.inp { padding-right: 36px; }
 .form-card { display: flex; flex-direction: column; gap: 20px; max-width: 760px; }
 .form-row { display: flex; flex-wrap: wrap; gap: 16px; }
 
+// Bloques del formulario de proyectos (Tarjeta / Caso STAR).
+.fset {
+    gap: 18px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid $line;
+}
+.fset-t {
+    margin: 0 0 4px;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: $text-2;
+
+    small { margin-left: 8px; color: $muted; font-size: 13px; font-weight: 400; }
+}
+.check-grid { display: flex; flex-wrap: wrap; gap: 12px 28px; }
+textarea.inp--tall { min-height: 160px; }
+.live-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: $ok;
+}
+
 .icon-pick { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .icon-o {

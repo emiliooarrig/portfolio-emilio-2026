@@ -1,6 +1,6 @@
 # Portafolio — Emilio Guzmán
 
-Landing de una sola página en **PHP vanilla con MVC propio**, **SCSS** compilado con **scssphp** y dependencias por **Composer**. Incluye la sección *conoce: Fovea*, en la que la página cambia a la paleta Bone & Violet de Fovea Studio, y un **panel de administración** en `/admin` para leer los mensajes de contacto y editar las certificaciones.
+Landing de una sola página en **PHP vanilla con MVC propio**, **SCSS** compilado con **scssphp** y dependencias por **Composer**. Incluye la sección *conoce: Fovea*, en la que la página cambia a la paleta Bone & Violet de Fovea Studio, una **página por proyecto** (`/proyectos/{slug}`) con el caso en formato STAR, y un **panel de administración** en `/admin` para leer los mensajes de contacto y editar proyectos, stack, experiencia y certificaciones.
 
 ## Requisitos
 
@@ -62,6 +62,7 @@ composer db:seed          # carga database/seeds/*.sql (el stack inicial) solo e
 composer admin:create     # pide nombre, correo y contraseña (mínimo 12 caracteres)
 composer certs:import     # carga data/certifications.json en MySQL (solo si la tabla está vacía)
 composer experience:import # carga data/experience.json en MySQL (solo si la tabla está vacía)
+composer projects:import  # carga data/projects.json en MySQL (solo si la tabla está vacía)
 composer admin:password   # cambia la contraseña de un administrador (cierra sus sesiones abiertas)
 ```
 
@@ -70,9 +71,10 @@ Entra en `/admin/login`. El panel tiene:
 - **Dashboard**: mensajes sin leer, de los últimos 7 días y totales; mensajes por día (últimos 14 días) y por tema; los 5 más recientes.
 - **Mensajes**: búsqueda por nombre, correo o texto; filtros por estado y tema; detalle con "Responder por correo". Al abrir un mensaje nuevo queda como *Leído*; también se puede marcar como *Respondido* o *Archivado*, o eliminar.
 - **Stack**: categorías (nombre, ícono, publicada) y sus herramientas (nombre, publicada y si aparece en la cinta animada). Cada categoría es una tarjeta con un campo para agregar herramientas rápido; clic en una herramienta para editarla o moverla de categoría (entra al final de la nueva). Al borrar una categoría se borran sus herramientas.
+- **Proyectos**: datos de la tarjeta (título, slug de la URL, subtítulo, kicker, estado y si está en vivo, destacado, categorías, ilustración, descripción, stack y repositorio) y el caso en 5 campos: **Situación, Tarea, Acción, Resultado y Aprendizaje**. Publicar u ocultar, eliminar y ordenar. Si el slug se deja vacío se genera del título; no se puede repetir. Cada proyecto publicado tiene su página en `/proyectos/{slug}`.
 - **Experiencia**: empresa, puesto, descripción y periodo (mes opcional, año, o "trabajo aquí actualmente"); publicar u ocultar y eliminar. En el sitio el periodo se ve como "mar 2021 — ago 2023", "2023 — hoy" o "Actual".
 - **Certificaciones**: alta, edición, publicar u ocultar y eliminar. El sitio muestra solo las publicadas, en el orden de la lista.
-- **Orden**: experiencia, certificaciones, categorías del stack y herramientas (dentro de su categoría) se ordenan arrastrando desde el asa ⠿, con mouse o con el dedo. Con el asa enfocada también se mueven con las flechas o con Inicio y Fin, y Esc cancela un arrastre. El orden se guarda solo (`POST …/orden`); si el servidor lo rechaza porque la lista cambió en otra pestaña, la lista regresa al último orden guardado. Sin JS aparecen botones ↑/↓. Lo nuevo entra al final de la lista. La lógica está en `App\Models\Ordering` y el arrastre en `admin.js`.
+- **Orden**: proyectos, experiencia, certificaciones, categorías del stack y herramientas (dentro de su categoría) se ordenan arrastrando desde el asa ⠿, con mouse o con el dedo. Con el asa enfocada también se mueven con las flechas o con Inicio y Fin, y Esc cancela un arrastre. El orden se guarda solo (`POST …/orden`); si el servidor lo rechaza porque la lista cambió en otra pestaña, la lista regresa al último orden guardado. Sin JS aparecen botones ↑/↓. Lo nuevo entra al final de la lista. La lógica está en `App\Models\Ordering` y el arrastre en `admin.js`.
 
 Transiciones del login:
 
@@ -90,7 +92,7 @@ Seguridad del panel:
 - CSRF en todos los formularios. Salir es un POST.
 - Las respuestas llevan `Cache-Control: no-store` y `X-Robots-Tag: noindex`.
 
-Si `DB_ENABLED=false`, `/admin` muestra cómo activarlo y el sitio lee la experiencia y las certificaciones de `data/experience.json` y `data/certifications.json` como respaldo.
+Si `DB_ENABLED=false`, `/admin` muestra cómo activarlo y el sitio lee los proyectos, la experiencia y las certificaciones de `data/projects.json`, `data/experience.json` y `data/certifications.json` como respaldo.
 
 ## Cómo funciona el formulario
 
@@ -108,7 +110,7 @@ Con JavaScript, el formulario envía por `fetch` y muestra los estados "Enviando
 
 | Qué | Dónde |
 |---|---|
-| Proyectos (y el texto de su modal) | `data/projects.json` |
+| Proyectos y su caso STAR | Panel `/admin/proyectos` |
 | Certificaciones | Panel `/admin/certificaciones` |
 | Mensajes del formulario | Panel `/admin/mensajes` |
 | Stack tecnológico (tarjetas y cinta) | Panel `/admin/stack` |
@@ -117,19 +119,19 @@ Con JavaScript, el formulario envía por `fetch` y muestra los estados "Enviando
 | Tu foto | `public/assets/img/emilio.webp` (proporción 4:5) |
 | Tu CV | `public/assets/docs/cv-emilio-guzman.pdf` |
 
-En los JSON, un campo con `null` se muestra como placeholder. Para agregar un proyecto, copia un bloque en `projects.json`. Las ilustraciones disponibles para el campo `visual` son `dash`, `menu`, `chain` y `list`; las categorías válidas son `dev`, `ops` y `data`.
+En los JSON, un campo con `null` se muestra como placeholder. `data/projects.json` solo se usa para la carga inicial (`composer projects:import`) y como respaldo sin base de datos; las ilustraciones disponibles para `visual` son `dash`, `menu`, `chain` y `list`, y las categorías válidas son `dev`, `ops` y `data`.
 
 ## Estructura
 
 ```
 app/
   Core/          App, Router, Request, Response, View, Auth, Csrf, Session, Database, RateLimiter, Logger, Env, helpers
-  Controllers/   HomeController, ContactController
-    Admin/       AdminController (base), Auth, Dashboard, Message, Stack, Experience, Certification
-  Models/        Project (JSON) · ContactMessage, StackCategory → StackTool, Experience, Certification, Admin (MySQL)
+  Controllers/   HomeController, ProjectController (página de proyecto), ContactController
+    Admin/       AdminController (base), Auth, Dashboard, Message, Project, Stack, Experience, Certification
+  Models/        ContactMessage, Project, StackCategory → StackTool, Experience, Certification, Admin (MySQL, con respaldo JSON)
   Services/      Mailer (PHPMailer)
-  Validation/    ContactRequest, StackCategoryRequest, StackToolRequest, ExperienceRequest, CertificationRequest
-  Views/         layout, home, partials/, partials/visuals/, errors/, admin/
+  Validation/    ContactRequest, ProjectRequest, StackCategoryRequest, StackToolRequest, ExperienceRequest, CertificationRequest
+  Views/         layout, home, project, partials/, partials/visuals/, errors/, admin/
 config/          config.php, routes.php
 data/            contenido editable en JSON
 database/        schema.sql, seeds/ (stack.sql)
@@ -148,6 +150,7 @@ storage/         logs/ y cache/ (deben tener permisos de escritura)
 - **Cómo trabajo** (escritorio): al llegar, la sección se fija y el scroll vertical mueve los cuatro pasos en horizontal. Cada paso se enciende al pasar (el texto sube y se aclara y el círculo se llena), la línea y la barra de progreso avanzan, y el contador marca el paso actual. Al terminar el recorrido la sección se suelta y el scroll vuelve a ser vertical. La lógica está en `app.js` y los estilos en `.proc-h` (`scss/sections/_process.scss`); la velocidad se cambia con `SPEED`. En pantallas de menos de 901 px de ancho o 560 px de alto, sin JavaScript o con "reducir movimiento", se queda la cuadrícula vertical.
 - **Fovea**: cuando su sección ocupa toda la pantalla, `app.js` agrega `html.is-fovea`. Un círculo violeta profundo (`$fv-wash`, #2B2266) nace del centro y cubre la página en 0.8 s, y la sección, sus vecinas (Proyectos y Experiencia), el menú y la barra de progreso pasan a la paleta Bone & Violet. Cuando la sección ocupa menos de la mitad de la pantalla, todo regresa. Las paletas están en `$fov-palette`, `$fov-projects-palette`, `$fov-exp-palette` y `$fov-nav-palette` (`scss/abstracts/_tokens.scss`), y los tiempos en `$fov-dur` y `$fov-color-*`.
 - **"conoce: Fovea" con pausa de scroll** (escritorio): al llegar al contenido de Fovea se fija en pantalla y el scroll hace aparecer sus 6 servicios uno por uno, con una guía "sigue bajando" y un contador; al terminar se suelta y el scroll continúa. Se ajusta con `TRAVEL` en `app.js`; estilos en `scss/sections/_fovea.scss`. En móvil, pantallas bajas o con movimiento reducido no hay pausa.
+- **Apertura de un proyecto** (`/proyectos/{slug}`): una cortina azul presenta el caso (kicker, título que sube tras una máscara y las letras S·T·A·R·+), se levanta seguida de una capa cobalto y la cabecera entra escalonada. Todo dura 1.5 s y es solo CSS (`.pj-cur`, `.pj-wipe` en `scss/sections/_project.scss`; los tiempos están en `$pj-cur-at` y `$pj-cur-dur`). Con "reducir movimiento" no aparece.
 - **Cursor personalizado** (solo con mouse): un punto y un anillo que lo sigue con retraso y se estira al moverse. Sobre enlaces crece; sobre los CTA se llena y muestra una palabra. Para ponerle palabra a cualquier elemento usa `data-cursor="Abrir"`; las descargas, enlaces externos, `mailto:`/WhatsApp y el botón de enviar la toman solos ("Descargar", "Visitar", "Escribir", "Enviar"). Estilos en `scss/layout/_cursor.scss`.
 - **Movimiento reducido**: si el sistema operativo tiene activado "reducir movimiento", se desactivan todas las animaciones.
 
@@ -186,7 +189,7 @@ Dónde se usa: confirmaciones de borrado y avisos del panel (guardado, errores, 
 - [ ] `APP_DEBUG=false` y `APP_KEY` generado
 - [ ] Llenar los placeholders (`[TU PUESTO]`, fechas, certificaciones, foto, CV, enlaces)
 - [ ] Probar el formulario con SMTP real y con la base de datos
-- [ ] Crear las tablas (`composer db:migrate`), cargar el stack (`composer db:seed`), tu usuario (`composer admin:create`) e importar la experiencia y las certificaciones (`composer experience:import`, `composer certs:import`)
+- [ ] Crear las tablas (`composer db:migrate`), cargar el stack (`composer db:seed`), tu usuario (`composer admin:create`) e importar proyectos, experiencia y certificaciones (`composer projects:import`, `composer experience:import`, `composer certs:import`)
 - [ ] Usar un usuario de MySQL con permisos mínimos (ver el final de `database/schema.sql`)
 - [ ] `composer install --no-dev --optimize-autoloader` en el servidor
 - [ ] Dar permisos de escritura a `storage/`

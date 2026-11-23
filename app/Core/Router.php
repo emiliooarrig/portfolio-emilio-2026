@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Core;
 
 /**
- * Router mínimo: método + ruta exacta → [Controlador::class, 'método'].
+ * Router mínimo: método + ruta → [Controlador::class, 'método'].
+ * Admite segmentos {nombre} (solo [a-z0-9-]+); la ruta exacta tiene prioridad.
  */
 final class Router
 {
     /** @var array<string, array<string, array{0: class-string, 1: string}>> */
     private array $routes = [];
+
+    /** @var array<string, list<array{0: string, 1: list<string>, 2: array{0: class-string, 1: string}}>> método => [regex, nombres, acción] */
+    private array $patterns = [];
 
     /**
      * @param array{0: class-string, 1: string} $action
@@ -33,7 +37,25 @@ final class Router
      */
     private function add(string $method, string $path, array $action): self
     {
-        $this->routes[$method]['/' . trim($path, '/')] = $action;
+        $path = '/' . trim($path, '/');
+
+        if (!str_contains($path, '{')) {
+            $this->routes[$method][$path] = $action;
+
+            return $this;
+        }
+
+        $names = [];
+        $regex = preg_replace_callback(
+            '/\\\\\{([a-z_]+)\\\\\}/',
+            static function (array $m) use (&$names): string {
+                $names[] = $m[1];
+
+                return '([a-z0-9-]+)';
+            },
+            preg_quote($path, '#')
+        );
+        $this->patterns[$method][] = ['#^' . $regex . '$#', $names, $action];
 
         return $this;
     }
@@ -43,10 +65,15 @@ final class Router
         $method = $request->method() === 'HEAD' ? 'GET' : $request->method();
         $path = $request->path();
 
-        $action = $this->routes[$method][$path] ?? null;
+        [$action, $params] = $this->match($method, $path);
 
         if ($action === null) {
-            $allowed = array_keys(array_filter($this->routes, static fn (array $r): bool => isset($r[$path])));
+            $allowed = [];
+            foreach (array_unique(array_merge(array_keys($this->routes), array_keys($this->patterns))) as $other) {
+                if ($this->match($other, $path)[0] !== null) {
+                    $allowed[] = $other;
+                }
+            }
 
             if ($allowed !== []) {
                 header('Allow: ' . implode(', ', $allowed));
@@ -59,6 +86,26 @@ final class Router
         }
 
         [$class, $handler] = $action;
-        (new $class())->{$handler}($request);
+        (new $class())->{$handler}($params === [] ? $request : $request->withParams($params));
+    }
+
+    /**
+     * Ruta exacta primero; si no, la primera con patrón que coincida.
+     *
+     * @return array{0: array{0: class-string, 1: string}|null, 1: array<string, string>}
+     */
+    private function match(string $method, string $path): array
+    {
+        if (isset($this->routes[$method][$path])) {
+            return [$this->routes[$method][$path], []];
+        }
+
+        foreach ($this->patterns[$method] ?? [] as [$regex, $names, $action]) {
+            if (preg_match($regex, $path, $m) === 1) {
+                return [$action, array_combine($names, array_slice($m, 1))];
+            }
+        }
+
+        return [null, []];
     }
 }

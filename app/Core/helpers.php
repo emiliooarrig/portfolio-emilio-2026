@@ -158,7 +158,8 @@ function icon(string $name, string $class = 'ic'): string
         'reply'          => '<path d="M10 8L4 13l6 5M4 13h10a6 6 0 016 6"/>',
         'eye'            => '<path d="M2.5 12S6 5 12 5s9.5 7 9.5 7-3.5 7-9.5 7-9.5-7-9.5-7z"/><circle cx="12" cy="12" r="3"/>',
         'eye-off'        => '<path d="M10.6 5.1A9.8 9.8 0 0112 5c6 0 9.5 7 9.5 7a17 17 0 01-2.7 3.6M6.6 6.6A16.6 16.6 0 002.5 12S6 19 12 19a9.6 9.6 0 005.4-1.6M9.9 9.9a3 3 0 004.2 4.2M3 3l18 18"/>',
-        'briefcase'      => '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/>',
+        'folder'         => '<path d="M3 7a2 2 0 012-2h4l2 2.5h8a2 2 0 012 2V17a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>',
+        'briefcase'      =>'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/>',
     ];
 
     return '<svg class="' . e($class) . '" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'

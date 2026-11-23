@@ -1,21 +1,22 @@
 <?php
 $linkedin = (string) config('site.linkedin');
+$home = url('/');
 ?>
 <footer class="foot">
     <div class="wrap">
         <div class="f-cols">
             <div>
-                <a class="logo logo--light ff-d" href="#top">emilio<b>.</b>guzmán</a>
+                <a class="logo logo--light ff-d" href="<?= e($home) ?>">emilio<b>.</b>guzmán</a>
                 <p class="f-about">Ingeniero en TI. Desarrollo, despliego y doy soporte a sistemas que la gente usa todos los días.</p>
             </div>
             <div>
                 <h3 class="ff-m">Navegación</h3>
                 <ul>
-                    <li><a class="ul" href="#sobre">Sobre mí</a></li>
-                    <li><a class="ul" href="#proyectos">Proyectos</a></li>
-                    <li><a class="ul" href="#fovea">Fovea Studio</a></li>
-                    <li><a class="ul" href="#experiencia">Experiencia</a></li>
-                    <li><a class="ul" href="#certificaciones">Certificaciones</a></li>
+                    <li><a class="ul" href="<?= e($home . '#sobre') ?>">Sobre mí</a></li>
+                    <li><a class="ul" href="<?= e($home . '#proyectos') ?>">Proyectos</a></li>
+                    <li><a class="ul" href="<?= e($home . '#fovea') ?>">Fovea Studio</a></li>
+                    <li><a class="ul" href="<?= e($home . '#experiencia') ?>">Experiencia</a></li>
+                    <li><a class="ul" href="<?= e($home . '#certificaciones') ?>">Certificaciones</a></li>
                 </ul>
             </div>
             <div>

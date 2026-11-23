@@ -22,7 +22,7 @@ final class HomeController
         Response::html(View::render('home', [
             'title'          => 'Emilio Guzmán — Ingeniero en TI · Software & Care Engineering',
             'description'    => 'Ingeniero en TI. Desarrollo sistemas a la medida, los llevo a producción y acompaño a las personas que los usan todos los días.',
-            'projects'       => Project::forView(),
+            'projects'       => Project::published(),
             'filters'        => Project::FILTERS,
             'certifications' => Certification::published(),
             'experience'     => Experience::published(),

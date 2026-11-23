@@ -3,6 +3,8 @@
 /** @var list<array<string, mixed>> $latest */
 /** @var int $certsTotal */
 /** @var int $certsLive */
+/** @var int $projectsTotal */
+/** @var int $projectsLive */
 /** @var array<string, string> $topics */
 /** @var array<string, string> $statuses */
 $days = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
@@ -27,6 +29,11 @@ $pct = static fn (int $n, int $max): int => $n > 0 ? max(4, (int) round($n / $ma
         <span class="kpi-v ff-d"><?= $stats['total'] ?></span>
         <span class="kpi-s"><?= $stats['by_status']['respondido'] ?> respondidos · <?= $stats['by_status']['archivado'] ?> archivados</span>
     </div>
+    <a class="kpi" href="<?= e(url('/admin/proyectos')) ?>">
+        <span class="kpi-k">Proyectos</span>
+        <span class="kpi-v ff-d"><?= $projectsLive ?></span>
+        <span class="kpi-s"><?= $projectsLive ?> de <?= $projectsTotal ?> publicados <?= icon('arrow-right') ?></span>
+    </a>
     <a class="kpi" href="<?= e(url('/admin/certificaciones')) ?>">
         <span class="kpi-k">Certificaciones</span>
         <span class="kpi-v ff-d"><?= $certsLive ?></span>

@@ -2,9 +2,11 @@
 /** @var string $content */
 /** @var string|null $title */
 /** @var string|null $description */
+/** @var string|null $canonical */
 $title = $title ?? config('app.name');
 $description = $description ?? '';
 $appUrl = (string) config('app.url');
+$canonical = $canonical ?? $appUrl;
 ?>
 <!doctype html>
 <html lang="es" class="no-js">
@@ -19,9 +21,9 @@ $appUrl = (string) config('app.url');
     <meta property="og:type" content="website">
     <meta property="og:title" content="<?= e($title) ?>">
     <meta property="og:description" content="<?= e($description) ?>">
-    <?php if ($appUrl !== ''): ?>
-    <meta property="og:url" content="<?= e($appUrl) ?>">
-    <link rel="canonical" href="<?= e($appUrl) ?>">
+    <?php if ($canonical !== ''): ?>
+    <meta property="og:url" content="<?= e($canonical) ?>">
+    <link rel="canonical" href="<?= e($canonical) ?>">
     <?php endif; ?>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

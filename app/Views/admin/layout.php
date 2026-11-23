@@ -12,6 +12,7 @@ $nav = [
     'dashboard'      => ['/admin', 'Dashboard', 'grid'],
     'messages'       => ['/admin/mensajes', 'Mensajes', 'mail'],
     'stack'          => ['/admin/stack', 'Stack', 'code'],
+    'projects'       => ['/admin/proyectos', 'Proyectos', 'folder'],
     'experience'     => ['/admin/experiencia', 'Experiencia', 'briefcase'],
     'certifications' => ['/admin/certificaciones', 'Certificaciones', 'award'],
 ];

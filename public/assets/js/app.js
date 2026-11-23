@@ -68,75 +68,6 @@
     });
   });
 
-  /* ─── Modal de caso (<dialog> nativo) ────────────────────── */
-  const dialog = document.getElementById('case-dialog');
-  const dialogBody = dialog ? dialog.querySelector('[data-case-body]') : null;
-  let lastTrigger = null;
-
-  const closeDialog = (after) => {
-    if (!dialog || !dialog.open) { if (after) after(); return; }
-
-    const finish = () => {
-      dialog.classList.remove('is-closing');
-      dialog.close();
-      if (after) after();
-    };
-
-    if (reduceMotion) { finish(); return; }
-
-    dialog.classList.add('is-closing');
-    dialog.querySelector('.m-p').addEventListener('animationend', finish, { once: true });
-  };
-
-  if (dialog && dialogBody && typeof dialog.showModal === 'function') {
-    document.querySelectorAll('[data-case]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const tpl = document.getElementById(`case-${btn.dataset.case}`);
-        if (!tpl) return;
-
-        dialogBody.replaceChildren(tpl.content.cloneNode(true));
-        lastTrigger = btn;
-        dialog.showModal();
-        document.body.classList.add('is-locked');
-      });
-    });
-
-    // Toda la tarjeta abre el caso; el botón sigue siendo el control para teclado.
-    document.querySelectorAll('.pc').forEach((card) => {
-      const btn = card.querySelector('[data-case]');
-      if (!btn) return;
-      card.addEventListener('click', (e) => {
-        if (e.target.closest('a, button') || String(window.getSelection()) !== '') return;
-        btn.click();
-      });
-    });
-
-    dialog.addEventListener('click', (e) => {
-      const closer = e.target.closest('[data-case-close]');
-
-      if (e.target === dialog) { e.preventDefault(); closeDialog(); return; } // clic en el fondo
-      if (!closer) return;
-
-      e.preventDefault();
-      const href = closer.getAttribute('href');
-      closeDialog(() => {
-        if (href && href.startsWith('#')) {
-          const target = document.querySelector(href);
-          if (target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
-          history.replaceState(null, '', href);
-        }
-      });
-    });
-
-    // Escape: anima el cierre en lugar de cerrar de golpe.
-    dialog.addEventListener('cancel', (e) => { e.preventDefault(); closeDialog(); });
-
-    dialog.addEventListener('close', () => {
-      document.body.classList.remove('is-locked');
-      if (lastTrigger) lastTrigger.focus();
-    });
-  }
-
   /* ─── Formulario de contacto (fetch con estados) ─────────── */
   const form = document.querySelector('[data-contact-form]');
   const okPanel = document.querySelector('[data-contact-ok]');
@@ -555,7 +486,7 @@
       cur.classList.add('is-click');
     });
 
-    // Los <dialog> (caso de proyecto, Alerta) viven en la capa superior: el cursor se
+    // Los <dialog> (Alerta) viven en la capa superior: el cursor se
     // muda al último abierto y vuelve al body cuando se cierran.
     new MutationObserver(() => {
       const top = Array.from(document.querySelectorAll('dialog[open]')).pop();

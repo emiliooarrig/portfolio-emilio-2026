@@ -20,7 +20,7 @@
 
         <div class="pgrid">
             <?php foreach ($projects as $p): ?>
-                <article class="pc<?= $p['featured'] ? ' pc-feat' : '' ?>" data-cursor="Abrir" data-cats="<?= e(implode(' ', $p['categories'])) ?>" data-feat="<?= $p['featured'] ? '1' : '0' ?>">
+                <article class="pc<?= $p['is_featured'] ? ' pc-feat' : '' ?>" data-cursor="Abrir" data-cats="<?= e(implode(' ', $p['categories'])) ?>" data-feat="<?= $p['is_featured'] ? '1' : '0' ?>">
                     <div class="pv" aria-hidden="true">
                         <div class="pv-in">
                             <?= App\Core\View::partial('visuals/' . $p['visual']) ?>
@@ -29,7 +29,7 @@
                     <div class="pb">
                         <div class="pmeta">
                             <span class="ff-m"><?= e($p['kicker']) ?></span>
-                            <span class="st<?= $p['live'] ? ' st-live' : '' ?>"><?= e($p['status']) ?></span>
+                            <span class="st<?= $p['is_live'] ? ' st-live' : '' ?>"><?= e($p['status']) ?></span>
                         </div>
                         <h3 class="pt ff-d"><?= e($p['title']) ?></h3>
                         <p class="ps"><?= e($p['subtitle']) ?></p>
@@ -40,9 +40,9 @@
                                     <li><?= e($tech) ?></li>
                                 <?php endforeach; ?>
                             </ul>
-                            <button class="more" type="button" data-case="<?= e($p['id']) ?>" data-requires-js aria-haspopup="dialog" aria-label="Ver caso: <?= e($p['title']) ?>">
+                            <a class="more" href="<?= e(url('/proyectos/' . $p['slug'])) ?>" aria-label="Ver caso: <?= e($p['title']) ?>">
                                 <?= icon('arrow-up-right') ?>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </article>

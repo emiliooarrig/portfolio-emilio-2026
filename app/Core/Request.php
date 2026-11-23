@@ -9,6 +9,9 @@ namespace App\Core;
  */
 final class Request
 {
+    /** @var array<string, string> Valores de los segmentos {nombre} de la ruta */
+    private array $params = [];
+
     /**
      * @param array<string, mixed> $post
      * @param array<string, mixed> $query
@@ -41,6 +44,25 @@ final class Request
         $path = '/' . trim(rawurldecode($uri), '/');
 
         return new self($method, $path, $_POST, $_GET, $_SERVER);
+    }
+
+    /**
+     * Copia de la petición con los parámetros de la ruta (/proyectos/{slug}).
+     *
+     * @param array<string, string> $params
+     */
+    public function withParams(array $params): self
+    {
+        $clone = clone $this;
+        $clone->params = $params;
+
+        return $clone;
+    }
+
+    /** Parámetro de la ruta ({nombre}); '' si no existe. */
+    public function param(string $key): string
+    {
+        return $this->params[$key] ?? '';
     }
 
     public function method(): string

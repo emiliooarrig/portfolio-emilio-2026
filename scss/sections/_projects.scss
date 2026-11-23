@@ -73,11 +73,12 @@
     }
 
     &:hover .pv-in { transform: scale(1.05); }
-    &:hover .more { background: $cobalt; border-color: $cobalt; color: $white; transform: rotate(45deg); }
+    &:hover .more { background: $cobalt; border-color: $cobalt; color: $white; }
+    &:hover .more .ic { transform: rotate(45deg); }
 }
 
-// Con JavaScript toda la tarjeta abre el caso (ver app.js).
-.js .pc { cursor: pointer; }
+// Toda la tarjeta es clicable: el enlace de .more se estira sobre ella (sin JS).
+.pc { position: relative; }
 
 .pc-feat {
     grid-column: span 2;
@@ -181,8 +182,17 @@
     background: $white;
     color: $ink;
     cursor: pointer;
-    transition: background .35s, color .35s, border-color .35s, transform .5s $ease-std;
+    transition: background .35s, color .35s, border-color .35s;
+
+    // Sin transform ni position aquí: el ::after debe medirse contra la tarjeta.
+    .ic { transition: transform .5s $ease-std; }
+
+    &::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+    &:focus-visible { outline: none; }
+    &:focus-visible::after { outline: 2px solid $sky; outline-offset: -2px; }
 }
+
+.pc:has(.more:focus-visible) { box-shadow: 0 0 0 2px $sky; }
 
 // ─── Ilustraciones de cada proyecto ──────────────────────────
 .vz {

@@ -19,4 +19,3 @@ echo View::partial('contact', [
     'contactMessage' => $contactMessage,
     'old'            => $old,
 ]);
-echo View::partial('case-dialog', ['projects' => $projects]);

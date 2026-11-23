@@ -40,6 +40,7 @@
         ],
         "certs:import": "php bin/console.php certs:import",
         "experience:import": "php bin/console.php experience:import",
+        "projects:import": "php bin/console.php projects:import",
         "db:migrate": "php bin/console.php db:migrate",
         "db:seed": "php bin/console.php db:seed",
         "post-install-cmd": [

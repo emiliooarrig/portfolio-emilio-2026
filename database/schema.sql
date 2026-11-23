@@ -105,6 +105,37 @@ CREATE TABLE IF NOT EXISTS stack_tools (
         REFERENCES stack_categories (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Proyectos de la sección pública, con su caso en formato STAR + aprendizaje.
+-- Cada uno tiene su página en /proyectos/{slug}. Se editan desde /admin/proyectos.
+-- categories y stack son listas separadas por coma. Para cargar data/projects.json: composer projects:import
+CREATE TABLE IF NOT EXISTS projects (
+    id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    slug          VARCHAR(80)  NOT NULL COMMENT 'Parte de la URL: /proyectos/{slug}',
+    title         VARCHAR(120) NOT NULL,
+    subtitle      VARCHAR(200) NOT NULL DEFAULT '',
+    kicker        VARCHAR(80)  NOT NULL DEFAULT '',
+    status        VARCHAR(60)  NOT NULL DEFAULT '',
+    is_live       TINYINT(1)   NOT NULL DEFAULT 0 COMMENT '1 = punto verde junto al estado',
+    is_featured   TINYINT(1)   NOT NULL DEFAULT 0 COMMENT '1 = tarjeta grande',
+    visual        VARCHAR(20)  NOT NULL DEFAULT 'dash',
+    categories    VARCHAR(40)  NOT NULL DEFAULT '' COMMENT 'Claves de filtro separadas por coma: dev,ops,data',
+    description   VARCHAR(400) NOT NULL DEFAULT '' COMMENT 'Resumen de la tarjeta',
+    stack         VARCHAR(500) NOT NULL DEFAULT '' COMMENT 'Tecnologías separadas por coma',
+    repo_url      VARCHAR(500) NOT NULL DEFAULT '',
+    situation     TEXT         NOT NULL,
+    task          TEXT         NOT NULL,
+    action        TEXT         NOT NULL,
+    result        TEXT         NOT NULL,
+    learning      TEXT         NOT NULL,
+    sort_order    INT          NOT NULL DEFAULT 0,
+    is_published  TINYINT(1)   NOT NULL DEFAULT 1,
+    created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_projects_slug (slug),
+    KEY idx_projects_order (is_published, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Recomendado: un usuario con permisos mínimos para la app.
 -- CREATE USER 'portfolio_app'@'localhost' IDENTIFIED BY 'cambia-esta-contraseña';
 -- GRANT SELECT, INSERT, UPDATE, DELETE ON portfolio.* TO 'portfolio_app'@'localhost';

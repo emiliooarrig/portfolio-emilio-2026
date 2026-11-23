@@ -17,7 +17,7 @@ use Throwable;
  */
 final class Ordering
 {
-    private const TABLES = ['experiences', 'certifications', 'stack_categories', 'stack_tools'];
+    private const TABLES = ['experiences', 'certifications', 'stack_categories', 'stack_tools', 'projects'];
     private const SCOPES = ['category_id'];
 
     /**

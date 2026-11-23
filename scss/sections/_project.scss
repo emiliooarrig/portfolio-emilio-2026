@@ -1,0 +1,274 @@
+// Página de un proyecto (/proyectos/{slug}). Reutiliza .pmeta, .st, .tags, .pv y .btn.
+.pj { padding-top: 120px; }
+
+.pj-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-bottom: 28px;
+    font-size: 13px;
+    letter-spacing: .04em;
+    color: $muted;
+    transition: color .3s;
+
+    .ic { transition: transform .35s $ease-std; }
+    &:hover { color: $cobalt; }
+    &:hover .ic { transform: translateX(-4px); }
+}
+
+.pj-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    gap: 56px;
+    align-items: center;
+    padding-bottom: 56px;
+    border-bottom: 1px solid $line;
+
+    @include below($bp-nav) { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+}
+
+.pj-info { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; min-width: 0; }
+
+.pj-title {
+    margin: 0;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -.04em;
+    font-weight: 700;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+}
+
+.pj-sub { margin: 0; font-size: 18px; }
+.pj-desc { max-width: 60ch; font-size: 17px; }
+.pj-tags { margin-top: 4px; }
+.pj-repo { margin-top: 8px; }
+
+.pj-vis {
+    height: 320px;
+    border: 1px solid $line;
+    border-radius: 24px;
+
+    @include below(560px) { height: 240px; }
+}
+
+// ─── Bloques STAR ────────────────────────────────────────────
+.pj-star { display: flex; flex-direction: column; max-width: 860px; margin: 0 auto; padding: 24px 0; }
+
+.pj-b {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 40px;
+    padding: 40px 0;
+    border-bottom: 1px solid $line;
+
+    &:last-child { border-bottom: 0; }
+
+    @include below(700px) { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 32px 0; }
+}
+
+.pj-k { display: flex; align-items: center; gap: 16px; align-self: start; }
+
+.pj-l {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px; height: 52px;
+    flex: none;
+    border-radius: 16px;
+    background: $ice;
+    color: $cobalt;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.pj-b:nth-child(1) .pj-l { background: $cobalt; color: $white; }
+
+.pj-h {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: $ink;
+}
+
+.pj-n { font-size: 11px; color: $muted; }
+
+.pj-t {
+    min-width: 0;
+    font-size: 17px;
+    line-height: 1.75;
+    color: $text-2;
+    overflow-wrap: anywhere;
+    text-wrap: pretty;
+}
+
+.pj-empty { margin: 0; padding: 48px 0; text-align: center; color: $muted; font-size: 16px; }
+
+// ─── Cierre ──────────────────────────────────────────────────
+.pj-end {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 24px;
+    padding: 36px 40px;
+    border-radius: 24px;
+    background: $ice;
+
+    @include below(560px) { padding: 28px 22px; }
+}
+
+.pj-cta-t { margin: 0 0 6px; font-size: 24px; letter-spacing: -.03em; }
+.pj-cta-p { margin: 0; color: $muted; font-size: 15px; }
+
+.pj-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+
+    @include below(560px) { grid-template-columns: minmax(0, 1fr); }
+}
+
+.pj-pn {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 22px 26px;
+    border-radius: 20px;
+    border: 1px solid $line;
+    background: $white;
+    color: $ink;
+    transition: border-color .4s, transform .4s $ease-std, box-shadow .4s;
+
+    &:hover { color: $ink; border-color: #B9C9F2; transform: translateY(-4px); box-shadow: 0 24px 40px -28px rgba($ink, .4); }
+
+    &--prev { grid-column: 1; }
+    &--next { grid-column: 2; align-items: flex-end; text-align: right; }
+
+    @include below(560px) { &--next, &--prev { grid-column: auto; } }
+}
+
+.pj-pl { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: $cobalt; }
+.pj-pt { font-size: 20px; font-weight: 700; letter-spacing: -.025em; }
+
+// ─── Apertura del caso ───────────────────────────────────────
+// Inspirada en la cortina del panel: una cortina azul presenta el proyecto
+// (kicker, título y S·T·A·R·+), se levanta seguida de una capa cobalto y el
+// contenido entra por partes. Solo CSS; todo termina en 1.5 s.
+//
+//   0.00–0.65  kicker, título y letras aparecen sobre la cortina
+//   0.62–1.17  la cortina sube (la capa cobalto la sigue hasta 1.25)
+//   0.84–1.50  la cabecera del caso entra escalonada
+$pj-cur-ease: cubic-bezier(.76, 0, .24, 1);
+$pj-cur-at:   .62s;
+$pj-cur-dur:  .55s;
+
+.pj-cur,
+.pj-wipe {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    animation: pjCurUp $pj-cur-dur $pj-cur-ease $pj-cur-at forwards;
+}
+
+// Debajo del cursor personalizado (z-index 1000) y encima del menú y la barra de progreso.
+.pj-wipe { z-index: 940; background: $cobalt; animation-delay: $pj-cur-at + .08s; }
+
+.pj-cur {
+    z-index: 950;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background:
+        radial-gradient(circle at 50% 120%, rgba($cobalt, .55), transparent 60%),
+        $navy;
+    color: $white;
+}
+
+.pj-cur-in {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 900px;
+    text-align: center;
+    animation: pjCurText $pj-cur-dur $pj-cur-ease $pj-cur-at forwards;
+}
+
+.pj-cur-k {
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: $on-navy-2;
+    animation: fadeUp .4s $ease-out .05s backwards;
+}
+
+// El título sube desde detrás de una máscara, como el titular del inicio.
+.pj-cur-t {
+    display: block;
+    overflow: hidden;
+    padding-bottom: .08em;
+    font-size: clamp(34px, 6vw, 72px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+
+    > span { display: inline-block; animation: lnUp .55s $ease-out .1s backwards; }
+}
+
+.pj-cur-star {
+    display: flex;
+    gap: 8px;
+
+    i {
+        display: inline-grid;
+        place-items: center;
+        width: 34px; height: 34px;
+        border-radius: 10px;
+        background: rgba($white, .08);
+        color: $sky;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 700;
+        animation: orbIn .3s $ease-spring backwards;
+
+        &:first-child { background: $cobalt; color: $white; }
+    }
+
+    @for $i from 1 through 5 {
+        i:nth-child(#{$i}) { animation-delay: .15s + $i * .05s; }
+    }
+}
+
+// La cabecera entra mientras se levanta la cortina (fill backwards: sin
+// animación, por ejemplo con "reducir movimiento", todo queda visible).
+.pj-back,
+.pj-info > *,
+.pj-vis { animation: pjIn .45s $ease-out backwards; }
+
+.pj-back { animation-delay: .84s; }
+
+@for $i from 1 through 6 {
+    .pj-info > :nth-child(#{$i}) { animation-delay: .84s + $i * .035s; }
+}
+
+.pj-vis { animation-name: pjVis; animation-duration: .6s; animation-delay: .9s; }
+
+@keyframes pjCurUp   { to { transform: translateY(-100%); visibility: hidden; } }
+@keyframes pjCurText { to { transform: translateY(-48px); opacity: 0; } }
+@keyframes pjIn      { from { opacity: 0; translate: 0 22px; } to { opacity: 1; translate: 0 0; } }
+@keyframes pjVis     { from { opacity: 0; scale: .94; translate: 0 26px; } to { opacity: 1; scale: 1; translate: 0 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .pj-cur, .pj-wipe { display: none; }
+}
